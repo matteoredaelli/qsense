@@ -1,0 +1,24 @@
+idra:
+  certificate:
+    cert: ~/certificates/idra/client.pem
+    key:  ~/certificates/idra/client_key.pem
+    root: ~/certificates/idra/root.pem
+  urls:
+    hub: https://idra.pirelli.com/hub
+  proxies:
+    scheme: https
+    port: 443
+    servers:
+      - pqlkapp067-05ww.applications.pirelli.com
+      - pqlkapp067-05ww.applications.pirelli.com
+  engines:
+    vproxy: hdrext
+    headers:
+      - "hdr-usr-ext: REDAELLI\\matteo"
+    servers:
+      fe_nodes:
+        - pqlkapp067-01ww.applications.pirelli.com
+        - pqlkapp067-02ww.applications.pirelli.com
+      self_nodes:
+        - pqlkapp067-03ww.applications.pirelli.com
+        - pqlkapp067-04ww.applications.pirelli.com
