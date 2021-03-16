@@ -6,15 +6,20 @@ import qsAPI
 import qsense
 
 class Qsense(object):
+    def deallocate_analyzer_licenses_for_professionals(self, host, certificate, dryrun=True):
+        """Deallocate analyzer license fom users with a professional license"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+        qsense.license.deallocate_analyzer_licenses_for_professionals(qrs, dryrun)
+
     def delete_removed_exernally_users(self, host, certificate, user_directory, dryrun=True):
         """Delete users that were removed externally (from active directory?)"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         qsense.users.delete_removed_exernally_users(qrs, user_directory, dryrun)
 
-    def export_apps(self, host, certificate, targetPath, pFilter="stream.name ne 'None'"):
-        """Export applications to files"""
+    def export_apps(self, host, certificate, target_path, pFilter="stream.name ne 'None'"):
+        """Export (published or passing any other filter) applications to qvd files"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
-        qsense.apps.export(qrs, targetPath=targetPath, pFilter=pFilter)
+        qsense.apps.export_by_filter(qrs, target_path=target_path, pFilter=pFilter)
 
     def export_users(self, host, certificate):
         """Export users and his/her groups"""
