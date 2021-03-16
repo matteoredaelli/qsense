@@ -9,13 +9,13 @@
 	|_|
 ```
 
-qsense is an useful library and command line for qliksense
+*qsense* is an useful library and command line for qliksense
 
-## installation
+## Installation
 
 pip install qsense
 
-## Useful commands
+## Commands
 
 ### Apps
 
