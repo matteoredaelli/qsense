@@ -8,4 +8,14 @@ pip install qsense
 
 ## Useful commands
 
-- export_remove_old_apps
+### Apps
+
+#### export_remove_old_apps
+
+qsense export_delete_old_apps qliksense.redaelli.org ~/certificates/qlik/client.pem  --target_path '/tmp' --modified_days=300 --last_reload_days=300
+
+###  Users
+
+#### delete_removed_exernally_users
+
+qsense delete_removed_exernally_users qliksense.redaelli.org ~/certificates/qlik/client.pem GROUP --nodryrun

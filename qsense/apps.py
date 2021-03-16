@@ -3,6 +3,8 @@ import logging
 import json
 import os
 import re
+from datetime import date
+from datetime import timedelta
 
 def export_apps(qrs, target_path, apps, save_meta=True, skipdata=True):
     for app in apps:
@@ -19,7 +21,13 @@ def export_by_filter(qrs, target_path, pFilter="stream.name ne 'None'", save_met
     apps = qrs.AppGet(pFilter=pFilter)
     return export_apps(qrs, target_path=target_path, apps=apps, save_meta=save_meta, skipdata=skipdata)
 
-def get_old_apps(qrs, modified_date='2020-08-01 00:00:00', last_reload_time='2020-08-01 00:00:00', published=False):
+def get_old_apps(qrs, modified_days=180, last_reload_days=180, published=False):
+    today = date.today()
+    modified_date = (today - timedelta(days=modified_days)).strftime("%Y-%m-%d %H:%M:%S")
+    logging.debug("Modified date = " + modified_date)
+
+    last_reload_time = (today - timedelta(days=last_reload_days)).strftime("%Y-%m-%d %H:%M:%S")
+    logging.debug("Last reload time = " + last_reload_time)
     pFilter="published eq {published} and modifiedDate lt '{modified}' and lastReloadTime lt '{reload}'".format(published=published,
                                                                                                                 modified=modified_date,
                                                                                                                 reload=last_reload_time)
@@ -33,8 +41,11 @@ def get_old_apps(qrs, modified_date='2020-08-01 00:00:00', last_reload_time='202
     return apps
 
 
-def export_delete_old_apps(qrs, target_path, modified_date, last_reload_time, published=False, save_meta=True, skipdata=True, export=True, delete=False):
-    apps = get_old_apps(qrs, modified_date, last_reload_time, published)
+def export_delete_old_apps(qrs, target_path, modified_days, last_reload_days, published=False, save_meta=True, skipdata=True, export=True, delete=False):
+    if delete and (modified_days < 60 or last_reload_days < 60):
+        logginf.error("You want to delete too recent apps. Bye")
+        return 1
+    apps = get_old_apps(qrs, modified_days, last_reload_days, published)
     if export:
         export_apps(qrs, apps=apps, target_path=target_path, save_meta=save_meta, skipdata=skipdata)
     if delete:

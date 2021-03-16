@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="qsense",
-    version="0.1.1",
+    version="0.2.0",
     author="Matteo Redaelli",
     author_email="matteo.redaelli@gmail.com",
-    description="qsense is a useful library / command line tool for qliksense",
+    description="qsense is a useful library and command line tool for qliksense",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://gitlab.com/matteoredaelli/qsense",
