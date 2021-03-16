@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="qsense",
-    version="0.2.0",
+    version="0.3.0",
     author="Matteo Redaelli",
     author_email="matteo.redaelli@gmail.com",
     description="qsense is a useful library and command line tool for qliksense",
