@@ -25,6 +25,14 @@ Export (published or passing any other filter) applications to qvd files
 
 	qsense export_delete_old_apps qliksense.redaelli.org ~/certificates/client.pem  --target_path '/tmp' --modified_days=300 --last_reload_days=300
 
+### Custom properties
+
+#### update_custom_property_with_users_list
+
+Update the value of a custom property (usually "UserAccess") with the list of all qliksense users.
+
+	qsense update_custom_property_with_users_list liksense.redaelli.org ~/certificates/client.pem UserAccess GROUP --nodryrun
+
 ### Licenses
 
 #### deallocate_analyzer_licenses_for_professionals
