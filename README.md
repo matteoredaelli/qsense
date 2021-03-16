@@ -1,5 +1,15 @@
 # qsense
 
+```
+	   ____
+  __ _/ ___|  ___ _ __  ___  ___
+ / _` \___ \ / _ \ '_ \/ __|/ _ \
+| (_| |___) |  __/ | | \__ \  __/
+ \__, |____/ \___|_| |_|___/\___|
+	|_|
+
+```
+
 qsense is an useful library and command line for qliksense
 
 ## installation
