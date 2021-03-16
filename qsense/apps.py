@@ -2,11 +2,14 @@ import qsAPI
 import logging
 import json
 import os
+import re
 
 def export_apps(qrs, target_path, apps, save_meta=True, skipdata=True):
     for app in apps:
         logging.info("Exporting app: " + str(app))
-        filename = os.path.join(target_path,  app['id'])
+        filename = app['modifiedByUserName'] + "-" + app['name'] + "-" + app["id"]
+        filename = re.sub("[\\\/& .]", '_', filename)
+        filename = os.path.join(target_path, filename)
         if save_meta:
             with open(filename + ".json", "w") as f:
                 f.write(json.dumps(apps, indent=4))

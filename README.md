@@ -1,10 +1,10 @@
-# pysense
+# qsense
 
-pysense is an useful library and command line for qliksense
+qsense is an useful library and command line for qliksense
 
 ## installation
 
-pip install pysense
+pip install qsense
 
 ## Useful commands
 
