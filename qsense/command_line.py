@@ -22,6 +22,11 @@ import qsense
 
 
 class Qsense(object):
+    def deallocate_unused_analyzer_licenses(self, host, certificate, days, dryrun=True):
+        """Deallocate analyzer license not used for N days"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+        qsense.license.deallocate_unused_analyzer_licenses(qrs, days, dryrun)
+
     def deallocate_analyzer_licenses_for_professionals(
         self, host, certificate, dryrun=True
     ):

@@ -9,13 +9,17 @@
 	|_|
 ```
 
-*qsense* is an python library and command line for qliksense
+*qsense* is a python library and command line tool for QLIK QlikSense. It contains some useful functions for administrators/developers of QLiksense
+
+It uses the python library (qsAPI)[https://github.com/rafael-sanz/qsAPI] for connecting to the QLiksense Repository APIs
 
 ## Installation
 
 pip install qsense
 
-## Commands
+## Commands and Functions
+
+Look at the fileqsense/command_line.py for details
 
 ### Apps
 
@@ -34,6 +38,12 @@ Update the value of a custom property (usually "UserAccess") with the list of al
 	qsense update_custom_property_with_users_list liksense.redaelli.org ~/certificates/client.pem UserAccess GROUP --nodryrun
 
 ### Licenses
+
+#### deallocate_unused_analyzer_licenses
+
+Deallocate not used (by N days) analyzer licenses
+
+	qsense deallocate_unused_analyzer_licenses qliksense.redaelli.org ~/certificates/client.pem --nodryrun
 
 #### deallocate_analyzer_licenses_for_professionals
 
