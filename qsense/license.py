@@ -12,15 +12,19 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
+  license.py
 
-import qsAPI
-import re
+  functions about license
+"""
+
 import logging
 from datetime import date
 from datetime import timedelta
-
+import qsAPI
 
 def deallocate_unused_analyzer_licenses(qrs, days, dryrun=True):
+    """ deallocate_unused_analyzer_licenses """
     today = date.today()
     last_used = (today - timedelta(days=days)).strftime("%Y-%m-%d %H:%M:%S")
     logging.debug("Last used date = " + last_used)

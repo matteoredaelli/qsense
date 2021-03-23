@@ -14,14 +14,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
-import fire
 import logging
+import fire
 import qsAPI
 import qsense
 
 
 class Qsense(object):
+    """qsense is a python and command line tool for Qliksense administrators"""
+
     def deallocate_unused_analyzer_licenses(self, host, certificate, days, dryrun=True):
         """Deallocate analyzer license not used for N days"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
