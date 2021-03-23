@@ -29,7 +29,6 @@ def export_apps(qrs, target_path, apps, save_meta=True, skipdata=True):
             filename = app["stream"]["name"]
         else:
             filename = ""
-        end
         filename = (
             filename
             + "-"
