@@ -103,6 +103,7 @@ def export_delete_old_apps(
             save_meta=save_meta,
             skipdata=skipdata,
         )
-    if delete:
+    for app in apps:
         logging.warning("Removing app: " + str(app))
-        qrs.AppDelete(app["id"])
+        if delete:
+            qrs.AppDelete(app["id"])
