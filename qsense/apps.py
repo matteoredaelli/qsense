@@ -55,7 +55,7 @@ def export_by_filter(
     )
 
 
-def get_old_apps(qrs, modified_days=180, last_reload_days=180, published=False):
+def get_old_apps(qrs, modified_days, last_reload_days, published=False):
     today = date.today()
     modified_date = (today - timedelta(days=modified_days)).strftime(
         "%Y-%m-%d %H:%M:%S"
