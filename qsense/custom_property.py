@@ -13,9 +13,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import qsAPI
-import re
 import logging
+import qsAPI
 
 
 def update_custom_property_with_users_list(

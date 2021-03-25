@@ -23,6 +23,19 @@ import qsense
 class Qsense(object):
     """qsense is a python and command line tool for Qliksense administrators"""
 
+    def qrs_get_entity(
+        self, host, certificate, entity, full_or_count="full", filter="1 eq 1"
+    ):
+        """Get entity list or count"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+        result = qrs.driver.get(
+            "/qrs/{entity}/{full_or_count}".format(
+                entity=entity, full_or_count=full_or_count
+            ),
+            {"filter": filter},
+        ).json()
+        print(result)
+
     def deallocate_unused_analyzer_licenses(self, host, certificate, days, dryrun=True):
         """Deallocate analyzer license not used for N days"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)

@@ -21,6 +21,18 @@ pip install qsense
 
 Look at the file qsense/command_line.py for details
 
+### Generic Entity (app,user,dataconnection,custompropertydefinition,..)
+
+Get all users
+
+	qsense  qrs_get_entity qliksense.redaelli.org ~/certificates/client.pem user
+
+Count all apps using a filter
+
+	qsense  qrs_get_entity qliksense.redaelli.org ~/certificates/client.pem custompropertydefinition --full_or_count count --filter "name eq 'GroupAccess'"
+
+	qsense  qrs_get_entity qliksense.redaelli.org ~/certificates/client.pem app --full_or_count count --filter "published ne True"
+
 ### Apps
 
 #### export_remove_old_apps
@@ -35,7 +47,7 @@ Export (published or passing any other filter) applications to qvd files
 
 Update the value of a custom property (usually "UserAccess") with the list of all qliksense users.
 
-	qsense update_custom_property_with_users_list liksense.redaelli.org ~/certificates/client.pem UserAccess GROUP --nodryrun
+	qsense update_custom_property_with_users_list qliksense.redaelli.org ~/certificates/client.pem UserAccess GROUP --nodryrun
 
 ### Licenses
 
