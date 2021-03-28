@@ -13,37 +13,31 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import qsAPI
 import logging
 import json
 import os
 import re
 from datetime import date
 from datetime import timedelta
+import qsAPI
 
 
-def export_apps(qrs, target_path, apps, save_meta=True, skipdata=True):
-    for app in apps:
-        logging.info("Exporting app: " + str(app))
-        if "stream" in app and "name" in app["name"]:
-            filename = app["stream"]["name"]
-        else:
-            filename = ""
-        filename = (
-            filename
-            + "-"
-            + app["modifiedByUserName"]
-            + "-"
-            + app["name"]
-            + "-"
-            + app["id"]
-        )
-        filename = re.sub("[\\\/& .]", "_", filename)
-        filename = os.path.join(target_path, filename)
-        if save_meta:
-            with open(filename + ".json", "w") as f:
-                f.write(json.dumps(apps, indent=4))
-        qrs.AppExport(app["id"], filename + ".qvd", skipdata=skipdata)
+def export_app(qrs, target_path, app, save_meta=True, skipdata=True):
+    """Export an application to a qvd file and its definition to a json file"""
+    logging.info("Exporting app: " + str(app))
+    if "stream" in app and "name" in app["name"]:
+        filename = app["stream"]["name"]
+    else:
+        filename = ""
+    filename = (
+        filename + "-" + app["modifiedByUserName"] + "-" + app["name"] + "-" + app["id"]
+    )
+    filename = re.sub("[\\\/& .]", "_", filename)
+    filename = os.path.join(target_path, filename)
+    if save_meta:
+        with open(filename + ".json", "w") as f:
+            f.write(json.dumps(app, indent=4))
+    return qrs.AppExport(app["id"], filename + ".qvd", skipdata=skipdata)
 
 
 def export_by_filter(
@@ -91,18 +85,24 @@ def export_delete_old_apps(
     delete=False,
 ):
     if delete and (modified_days < 60 or last_reload_days < 60):
-        logginf.error("You want to delete too recent apps. Bye")
+        logging.error("You want to delete too recent apps. Bye")
         return 1
     apps = get_old_apps(qrs, modified_days, last_reload_days, published)
-    if export:
-        export_apps(
-            qrs,
-            apps=apps,
-            target_path=target_path,
-            save_meta=save_meta,
-            skipdata=skipdata,
-        )
     for app in apps:
-        logging.warning("Removing app: " + str(app))
+        logging.debug("Exporting app: " + str(app))
+        resp = False
+        if export:
+            resp = export_app(
+                qrs,
+                app=app,
+                target_path=target_path,
+                save_meta=save_meta,
+                skipdata=skipdata,
+            )
+        logging.warning("Removing app: " + app["id"])
         if delete:
-            qrs.AppDelete(app["id"])
+            # An app can deleted if and only if it was successuffly exported to a file
+            if resp and resp.status_code == 200:
+                qrs.AppDelete(app["id"])
+            else:
+                logging.error("Cannot export (and then delete) app: " + app["id"])
