@@ -70,6 +70,7 @@ def get_old_apps(qrs, modified_days, last_reload_days, published=False):
     ##                               'createdDate',
     ##                               'modifiedDate', 'modifiedByUserName',
     ##                               'published', 'lastReloadTime', 'fileSize']}, apps)
+    logging.debug("Found {count} apps:".format(count=len(apps)))
     return apps
 
 
@@ -81,7 +82,7 @@ def export_delete_old_apps(
     published=False,
     save_meta=True,
     skipdata=True,
-    export=True,
+    export=False,
     delete=False,
 ):
     if delete and (modified_days < 60 or last_reload_days < 60):
@@ -89,9 +90,10 @@ def export_delete_old_apps(
         return 1
     apps = get_old_apps(qrs, modified_days, last_reload_days, published)
     for app in apps:
-        logging.debug("Exporting app: " + str(app))
+        logging.debug("Found app: " + str(app))
         resp = False
         if export:
+            logging.warning("Removing app: " + app["id"])
             resp = export_app(
                 qrs,
                 app=app,
@@ -99,8 +101,9 @@ def export_delete_old_apps(
                 save_meta=save_meta,
                 skipdata=skipdata,
             )
-        logging.warning("Removing app: " + app["id"])
+
         if delete:
+            logging.warning("Removing app: " + app["id"])
             # An app can deleted if and only if it was successuffly exported to a file
             if resp and resp.status_code == 200:
                 qrs.AppDelete(app["id"])

@@ -74,12 +74,12 @@ class Qsense(object):
         host,
         certificate,
         target_path,
-        modified_days,
-        last_reload_days,
+        modified_days=1000,
+        last_reload_days=1000,
         published=False,
         save_meta=True,
         skipdata=True,
-        export=True,
+        export=False,
         delete=False,
     ):
         """Export and delete old apps using 'modified_date' and 'last_reload_time' filters."""
