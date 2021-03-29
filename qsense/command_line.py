@@ -20,7 +20,7 @@ import qsAPI
 import qsense
 
 
-class Qsense(object):
+class Qsense:
     """qsense is a python and command line tool for Qliksense administrators"""
 
     def qrs_get_entity(self, host, certificate, entity, count=False, filter="1 eq 1"):
@@ -58,11 +58,11 @@ class Qsense(object):
         qsense.users.delete_removed_exernally_users(qrs, user_directory, dryrun)
 
     def export_apps(
-        self, host, certificate, target_path, pFilter="stream.name ne 'None'"
+        self, host, certificate, target_path, filter="stream.name ne 'None'"
     ):
         """Export (published or passing any other filter) applications to qvd files"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
-        qsense.apps.export_by_filter(qrs, target_path=target_path, pFilter=pFilter)
+        qsense.apps.export_by_filter(qrs, target_path=target_path, pFilter=filter)
 
     def export_users(self, host, certificate):
         """Export users and his/her groups"""
@@ -103,16 +103,17 @@ class Qsense(object):
         custom_property_name,
         user_directory,
         dryrun=True,
-        check_count=100,
+        threshold=100,
     ):
         """update the value of a custom property with the list of all qliksense users"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         return qsense.custom_property.update_custom_property_with_users_list(
-            qrs, custom_property_name, user_directory, dryrun, check_count
+            qrs, custom_property_name, user_directory, dryrun, threshold
         )
 
 
 def main():
+    """main"""
     logging.basicConfig(level=logging.DEBUG)
     fire.Fire(Qsense)
 
