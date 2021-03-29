@@ -18,8 +18,11 @@ import qsAPI
 
 
 def update_custom_property_with_users_list(
-    qrs, custom_property_name, user_directory, dryrun=True, check_count=100
+    qrs, custom_property_name, user_directory, dryrun=True, threshold=100
 ):
+    """Update a custom property (usually UserAccess) with the list of Qliksense users. There is a threshold,
+    just to be sure that at least a fixes nunber of user should be found before updating teh custom property
+    """
     result = qrs.driver.get(
         "/qrs/custompropertydefinition/full",
         {"filter": "name eq '{name}'".format(name=custom_property_name)},
@@ -38,8 +41,14 @@ def update_custom_property_with_users_list(
             directory=user_directory
         )
     )
-    logging.info("{tot} users will be set".format(tot=len(users)))
-    assert len(users) > check_count
+    logging.info("Found {tot} users".format(tot=len(users)))
+    if len(users) < check_count:
+        logging.warning(
+            "The custom poperty will not be updated: too few users, the threshold is {threshold}".format(
+                threshold=threshold
+            )
+        )
+        return
     names = list(map(lambda u: u["userId"], users))
 
     user_access["choiceValues"] = names
