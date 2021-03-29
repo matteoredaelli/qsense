@@ -16,6 +16,7 @@
 
 import logging
 import fire
+import json
 import qsAPI
 import qsense
 
@@ -36,7 +37,7 @@ class Qsense:
             ),
             {"filter": filter},
         ).json()
-        print(result)
+        print(json.dumps(result))
 
     def deallocate_unused_analyzer_licenses(self, host, certificate, days, dryrun=True):
         """Deallocate analyzer license not used for N days"""
