@@ -23,11 +23,13 @@ import qsense
 class Qsense(object):
     """qsense is a python and command line tool for Qliksense administrators"""
 
-    def qrs_get_entity(
-        self, host, certificate, entity, full_or_count="full", filter="1 eq 1"
-    ):
+    def qrs_get_entity(self, host, certificate, entity, count=False, filter="1 eq 1"):
         """Get entity list or count"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+        if count:
+            full_or_count = "count"
+        else:
+            full_or_count = "full"
         result = qrs.driver.get(
             "/qrs/{entity}/{full_or_count}".format(
                 entity=entity, full_or_count=full_or_count
