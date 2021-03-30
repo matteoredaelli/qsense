@@ -13,33 +13,99 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import qsAPI
 import re
 import logging
+import qsAPI
+from .mail import send_mail
+
+
+def notify_user_via_mail(
+    qrs,
+    user,
+    mail_smtp,
+    mail_subject,
+    message,
+    mail_from,
+    mail_to,
+    mail_cc,
+    mail_bcc,
+):
+    logging.debug("User: " + str(user))
+    mailto = mail_to
+    if mailto == "":
+        ## teh owner of teh app will be notified
+        if isinstance(user, dict):
+            id = user["id"]
+        else:
+            id = user
+
+        mailto = find_mail_from_user_id(qrs, id)
+    send_mail(mail_smtp, mail_from, mailto, mail_subject, message, mail_cc, mail_bcc)
+
+
+def extract_mail(u):
+    """Extract the mail attribute from the user dictionary"""
+    logging.debug("User %s" % str(u))
+    if not u:
+        logging.error("User is empty")
+        return None
+    if not "attributes" in u:
+        logging.error("User without 'attribute' key")
+        return None
+
+    mails = list(filter(lambda a: a["attributeType"] == "Email", u["attributes"]))
+    if len(mails) > 0:
+        return mails[0]["attributeValue"]
+    else:
+        logging.warning("No mail found for user")
+        return None
+
+
+def find_mail_from_user_id(qrs, id):
+    users = qrs.UserGet(pFilter="id eq %s" % id)
+    mail = None
+    if len(users) != 1:
+        logging.error("Cannot find a user with ID=%" % id)
+    else:
+        mail = extract_mail(users[0])
+    return mail
+
 
 def delete_removed_exernally_users(qrs, user_directory, dryrun=True):
-        users = qrs.UserGet(pFilter="userDirectory eq '%s' and removedExternally eq True" % user_directory)
-        logging.warning("Users to be deleted: %s" % len(users))
-        for u in users:
-              logging.warning("User to be deleted: %s" % u["name"])
-              if not dryrun:
-                    qrs.UserDelete(u['id'])
+    users = qrs.UserGet(
+        pFilter="userDirectory eq '%s' and removedExternally eq True" % user_directory
+    )
+    logging.warning("Users to be deleted: %s" % len(users))
+    for u in users:
+        logging.warning("User to be deleted: %s" % u["name"])
+        if not dryrun:
+            qrs.UserDelete(u["id"])
 
-def export_users_and_groups(qrs, pFilter="removedExternally ne True", pUserID="full", groupFilter="^QLIKSENSE_", userAttribute="name", sep="\t"):
+
+def export_users_and_groups(
+    qrs,
+    pFilter="removedExternally ne True",
+    pUserID="full",
+    groupFilter="^QLIKSENSE_",
+    userAttribute="name",
+    sep="\t",
+):
     users = qrs.UserGet(pFilter=pFilter, pUserID=pUserID)
     for u in users:
         if "attributes" in u.keys():
             for a in u["attributes"]:
                 groupname = a["attributeValue"]
                 if re.match(groupFilter, groupname, re.IGNORECASE):
-                    print("{name}{sep}{groupname}\n".format(name=u[userAttribute],
-                                                              groupname=groupname,
-                                                              sep=sep))
+                    print(
+                        "{name}{sep}{groupname}\n".format(
+                            name=u[userAttribute], groupname=groupname, sep=sep
+                        )
+                    )
 
 
 def user_sessions(hosts, certificate, usergroup, userid, vproxies=""):
     for server in hosts.split(","):
         for vproxy in vproxies.split(","):
-            qps=qsAPI.QPS(proxy=server, certificate=certificate)
+            qps = qsAPI.QPS(proxy=server, certificate=certificate)
             print(server + " : " + vproxy)
             print(qps.GetUser(usergroup, user).json())

@@ -35,11 +35,20 @@ Count all apps using a filter
 
 ### Apps
 
-#### export_remove_old_apps
+#### export_apps
 
 Export (published or passing any other filter) applications to qvd files
 
-	qsense export_delete_old_apps qliksense.redaelli.org ~/certificates/client.pem  --target_path '/tmp' --modified_days=300 --last_reload_days=300
+	qsense export_apps qliksense.redaelli.org ~/certificates/client.pem  --target_path '/tmp' --filter "published eq true"
+
+#### find_old_apps
+
+Find old apps using 'modified_date' and 'last_reload_time' filters. Then you can export them or delete or notify via email the owners
+
+	qsense find_old_apps qliksense.redaelli.org ~/certificates/client.pem  --target_path '/tmp' --modified_days=300 --last_reload_days=300
+
+
+	qsense find_old_apps qliksense.redaelli.org ~/certificates/client.pem  --modified_days=300 --last_reload_days=300 --mail_subject "qlik - you have an old app, please delete it" --mail_to matteo@example.com
 
 ### Custom properties
 

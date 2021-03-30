@@ -70,31 +70,46 @@ class Qsense:
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         qsense.users.export_users_and_groups(qrs)
 
-    def export_delete_old_apps(
+    def find_old_apps(
         self,
         host,
         certificate,
-        target_path,
         modified_days=1000,
         last_reload_days=1000,
         published=False,
+        target_path=".",
         save_meta=True,
         skipdata=True,
         export=False,
         delete=False,
+        notify_user=False,
+        mail_smtp="localhost",
+        mail_subject="Your Qliksense old app is still useful?",
+        mail_from="noreply@localhost",
+        mail_to="",
+        mail_cc="",
+        mail_bcc="",
     ):
-        """Export and delete old apps using 'modified_date' and 'last_reload_time' filters."""
+        """Find old apps using 'modified_date' and 'last_reload_time' filters:
+        then you can export them or delete or notify via email the owners"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
-        return qsense.apps.export_delete_old_apps(
+        return qsense.apps.find_old_apps(
             qrs,
-            target_path,
             modified_days,
             last_reload_days,
             published=published,
+            target_path=target_path,
             save_meta=save_meta,
             skipdata=skipdata,
             export=export,
             delete=delete,
+            notify_user=notify_user,
+            mail_smtp=mail_smtp,
+            mail_subject=mail_subject,
+            mail_from=mail_from,
+            mail_to=mail_to,
+            mail_cc=mail_cc,
+            mail_bcc=mail_bcc,
         )
 
     def update_custom_property_with_users_list(
