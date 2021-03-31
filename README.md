@@ -1,13 +1,4 @@
-# qsense
-
-```
-	   ____
-  __ _/ ___|  ___ _ __  ___  ___
- / _` \___ \ / _ \ '_ \/ __|/ _ \
-| (_| |___) |  __/ | | \__ \  __/
- \__, |____/ \___|_| |_|___/\___|
-	|_|
-```
+# qSense
 
 *qsense* is a python library and command line tool for QLIK QlikSense. It contains some useful functions for administrators/developers of QLiksense
 
