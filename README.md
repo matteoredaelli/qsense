@@ -13,15 +13,15 @@
 
 It uses the python library [qsAPI](https://github.com/rafael-sanz/qsAPI) for connecting to the QLiksense Repository APIs
 
-## Installation
+# Installation
 
 pip install qsense
 
-## Commands and Functions
+# Usage
 
 Look at the file qsense/command_line.py for details
 
-### Generic Entity (app,user,dataconnection,custompropertydefinition,..)
+## Generic Entity (app,user,dataconnection,custompropertydefinition,..)
 
 Get all users
 
@@ -40,6 +40,12 @@ Count all apps using a filter
 Export (published or passing any other filter) applications to qvd files
 
 	qsense export_apps qliksense.redaelli.org ~/certificates/client.pem  --target_path '/tmp' --filter "published eq true"
+
+#### find_users_with_unpublished_apps
+
+Find users with too many unpublished apps in their work area
+
+	qsense find_users_with_unpublished_apps qliksense.redaelli.org ~/certificates/client.pem --threshold 50
 
 #### find_old_apps
 
