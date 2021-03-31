@@ -24,6 +24,59 @@ import qsense
 class Qsense:
     """qsense is a python and command line tool for Qliksense administrators"""
 
+    def find_users_with_unpublished_apps(
+        self,
+        host,
+        certificate,
+        threshold=100,
+        notify_user=False,
+        mail_smtp="localhost",
+        mail_subject="Qlik: too many unpublished apps",
+        mail_from="noreply@localhost",
+        mail_to="",
+        mail_cc="",
+        mail_bcc="",
+    ):
+        """Find users with too many unpublished apps"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+        filter = "published eq False"
+        ## find unpublished apps
+        apps = qrs.driver.get(
+            "/qrs/app/full",
+            {"filter": filter},
+        ).json()
+        logging.debug("Found %d apps." % len(apps))
+        ## extract owner IDs from apps
+        users = list(map(lambda a: a["owner"]["name"] + "|" + a["owner"]["id"], apps))
+
+        ## frequency
+        users_freq = qsense.utils.count_frequency(users)
+        ## filter highest values
+        threshold = int(threshold)
+        ##users_subset = dict(
+        ##    filter(lambda elem: elem[1] > threshold, users_freq.items())
+        ##)
+
+        for u, count in users_freq.items():
+            if count > threshold:
+                logging.info("%s: %d" % (u, count))
+                if notify_user:
+                    mailto = u.split["|"][1]
+                    if mail_to != "":
+                        mailto = mail_to
+
+                    notify_user_via_mail(
+                        qrs,
+                        mailto,
+                        mail_smtp,
+                        mail_subject,
+                        "You have %d unpublished apps: please delete some of them!",
+                        mail_from,
+                        mailto,
+                        mail_cc,
+                        mail_bcc,
+                    )
+
     def qrs_get_entity(self, host, certificate, entity, count=False, filter="1 eq 1"):
         """Get entity list or count"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)

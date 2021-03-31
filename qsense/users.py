@@ -33,7 +33,7 @@ def notify_user_via_mail(
     logging.debug("User: " + str(user))
     mailto = mail_to
     if mailto == "":
-        ## teh owner of teh app will be notified
+        ## the owner of the app will be notified
         if isinstance(user, dict):
             id = user["id"]
         else:
