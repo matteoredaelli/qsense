@@ -45,9 +45,15 @@ def export_by_filter(
     qrs, target_path, pFilter="stream.name ne 'None'", save_meta=True, skipdata=True
 ):
     apps = qrs.AppGet(pFilter=pFilter)
-    return export_apps(
-        qrs, target_path=target_path, apps=apps, save_meta=save_meta, skipdata=skipdata
-    )
+    for app in apps:
+        export_app(
+            qrs,
+            target_path=target_path,
+            app=app,
+            save_meta=save_meta,
+            skipdata=skipdata,
+        )
+    return apps
 
 
 def get_old_apps(qrs, modified_days, last_reload_days, published=False):
