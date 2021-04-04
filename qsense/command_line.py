@@ -61,7 +61,7 @@ class Qsense:
             if count > threshold:
                 logging.info("%s: %d" % (u, count))
                 if notify_user:
-                    mailto = u.split["|"][1]
+                    mailto = u.split("|")[1]
                     if mail_to != "":
                         mailto = mail_to
 
