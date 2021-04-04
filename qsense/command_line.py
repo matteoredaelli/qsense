@@ -70,8 +70,8 @@ class Qsense:
                         mailto,
                         mail_smtp,
                         mail_subject,
-                        "You have %d unpublished apps: please delete some of them!"
-                        % count,
+                        "%s has %d unpublished apps: please delete some of them!"
+                        % (u, count),
                         mail_from,
                         mailto,
                         mail_cc,
