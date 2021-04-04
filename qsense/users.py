@@ -30,9 +30,10 @@ def notify_user_via_mail(
     mail_cc,
     mail_bcc,
 ):
-    logging.debug("User: " + str(user))
-    mailto = mail_to
-    if mailto == "":
+    logging.debug("Sendmail to the user: " + str(user))
+    if mail_to == "":
+        mailto = mail_to
+    else:
         ## the owner of the app will be notified
         if isinstance(user, dict):
             id = user["id"]
@@ -48,7 +49,7 @@ def notify_user_via_mail(
 
 def extract_mail(u):
     """Extract the mail attribute from the user dictionary"""
-    logging.debug("User %s" % str(u))
+    logging.debug("Extract mail from user %s" % str(u))
     if not u:
         logging.error("User is empty")
         return None
@@ -58,17 +59,19 @@ def extract_mail(u):
 
     mails = list(filter(lambda a: a["attributeType"] == "Email", u["attributes"]))
     if len(mails) > 0:
-        return mails[0]["attributeValue"]
+        result = mails[0]["attributeValue"]
+        logging.debug(result)
+        return result
     else:
-        logging.warning("No mail found for user")
+        logging.error("No mail found for user ")
         return None
 
 
 def find_mail_from_user_id(qrs, id):
     users = qrs.UserGet(pFilter="id eq %s" % id)
-    mail = None
     if len(users) != 1:
         logging.error("Cannot find a user with ID=%" % id)
+        mail = None
     else:
         mail = extract_mail(users[0])
     return mail
