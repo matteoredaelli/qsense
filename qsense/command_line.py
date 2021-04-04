@@ -29,13 +29,6 @@ class Qsense:
         host,
         certificate,
         threshold=100,
-        notify_user=False,
-        mail_smtp="localhost",
-        mail_subject="Qlik: too many unpublished apps",
-        mail_from="noreply@localhost",
-        mail_to="",
-        mail_cc="",
-        mail_bcc="",
     ):
         """Find users with too many unpublished apps"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
@@ -58,25 +51,10 @@ class Qsense:
         ##)
 
         for u, count in users_freq.items():
+            u_name = u.split("|")[0]
+            u_id = u.split("|")[1]
             if count > threshold:
                 logging.info("%s: %d" % (u, count))
-                if notify_user:
-                    mailto = u.split("|")[1]
-                    if mail_to != "":
-                        mailto = mail_to
-
-                    qsense.users.notify_user_via_mail(
-                        qrs,
-                        mailto,
-                        mail_smtp,
-                        mail_subject,
-                        "%s has %d unpublished apps: please delete some of them!"
-                        % (u.split("|")[0], count),
-                        mail_from,
-                        mailto,
-                        mail_cc,
-                        mail_bcc,
-                    )
 
     def qrs_get_entity(self, host, certificate, entity, count=False, filter="1 eq 1"):
         """Get entity list or count"""
@@ -136,13 +114,6 @@ class Qsense:
         skipdata=True,
         export=False,
         delete=False,
-        notify_user=False,
-        mail_smtp="localhost",
-        mail_subject="Your Qliksense old app is still useful?",
-        mail_from="noreply@localhost",
-        mail_to="",
-        mail_cc="",
-        mail_bcc="",
     ):
         """Find old apps using 'modified_date' and 'last_reload_time' filters:
         then you can export them or delete or notify via email the owners"""
@@ -157,13 +128,6 @@ class Qsense:
             skipdata=skipdata,
             export=export,
             delete=delete,
-            notify_user=notify_user,
-            mail_smtp=mail_smtp,
-            mail_subject=mail_subject,
-            mail_from=mail_from,
-            mail_to=mail_to,
-            mail_cc=mail_cc,
-            mail_bcc=mail_bcc,
         )
 
     def update_custom_property_with_users_list(

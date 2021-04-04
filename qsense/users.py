@@ -16,35 +16,6 @@
 import re
 import logging
 import qsAPI
-from .mail import send_mail
-
-
-def notify_user_via_mail(
-    qrs,
-    user,
-    mail_smtp,
-    mail_subject,
-    message,
-    mail_from,
-    mail_to,
-    mail_cc,
-    mail_bcc,
-):
-    logging.debug("Sendmail to the user: " + str(user))
-    if mail_to == "":
-        mailto = mail_to
-    else:
-        ## the owner of the app will be notified
-        if isinstance(user, dict):
-            id = user["id"]
-        else:
-            id = user
-
-        mailto = find_mail_from_user_id(qrs, id)
-        if not mailto:
-            logging.error("Missing email address for user: " + user)
-            mailto = mail_cc
-    send_mail(mail_smtp, mail_from, mailto, mail_subject, message, mail_cc, mail_bcc)
 
 
 def extract_mail(u):

@@ -20,7 +20,6 @@ import re
 from datetime import date
 from datetime import timedelta
 import qsAPI
-from .users import notify_user_via_mail
 
 
 def export_app(qrs, target_path, app, save_meta=True, skipdata=True):
@@ -91,13 +90,6 @@ def find_old_apps(
     skipdata,
     export,
     delete,
-    notify_user,
-    mail_smtp,
-    mail_subject,
-    mail_from,
-    mail_to,
-    mail_cc,
-    mail_bcc,
 ):
     if delete and (modified_days < 60 or last_reload_days < 60):
         logging.error("You want to delete too recent apps. Bye")
@@ -105,18 +97,6 @@ def find_old_apps(
     apps = get_old_apps(qrs, modified_days, last_reload_days, published)
     for app in apps:
         logging.debug("Found app: " + str(app))
-        if notify_user:
-            notify_user_via_mail(
-                qrs,
-                app["owner"]["id"],
-                mail_smtp,
-                mail_subject,
-                json.dumps(app, indent=3),
-                mail_from,
-                mail_to,
-                mail_cc,
-                mail_bcc,
-            )
         resp = False
         if export:
             logging.warning("Removing app: " + app["id"])
