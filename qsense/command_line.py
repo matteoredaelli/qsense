@@ -65,12 +65,13 @@ class Qsense:
                     if mail_to != "":
                         mailto = mail_to
 
-                    notify_user_via_mail(
+                    qsense.users.notify_user_via_mail(
                         qrs,
                         mailto,
                         mail_smtp,
                         mail_subject,
-                        "You have %d unpublished apps: please delete some of them!",
+                        "You have %d unpublished apps: please delete some of them!"
+                        % count,
                         mail_from,
                         mailto,
                         mail_cc,
