@@ -71,7 +71,7 @@ class Qsense:
                         mail_smtp,
                         mail_subject,
                         "%s has %d unpublished apps: please delete some of them!"
-                        % (u, count),
+                        % (u.split("|")[0], count),
                         mail_from,
                         mailto,
                         mail_cc,
