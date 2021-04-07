@@ -16,7 +16,6 @@
 from .apps import *
 from .custom_property import *
 from .license import *
-from .mail import *
 from .status import *
 from .users import *
 from .utils import *
