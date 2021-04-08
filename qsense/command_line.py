@@ -56,7 +56,56 @@ class Qsense:
             if count > threshold:
                 logging.info("%s: %d" % (u, count))
 
-    def qrs_get_entity(self, host, certificate, entity, count=False, filter="1 eq 1"):
+    def add_entity(self, host, certificate, entity, filename, newid=False):
+        """add entity list"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+
+        with open(filename) as f:
+            bodies = json.load(f)
+        if not bodies:
+            logging.error("Cannot read body from filename. Bye")
+            return
+        if not isinstance(bodies, list):
+            logging.error("A list json object was expected. Bye")
+            return
+        for body in bodies:
+            if newid:
+                if "id" in body.keys():
+                    logging.debug(
+                        "Removing the ID {id} from the entity".format(id=body["id"])
+                    )
+                    del body["id"]
+            logging.debug("Adding entity {entity}".format(entity=entity))
+            logging.debug(body)
+            result = qrs.driver.post("/qrs/{entity}".format(entity=entity), data=body)
+            logging.debug(result)
+            logging.debug(result.json())
+
+    def update_entity(self, host, certificate, entity, filename):
+        """update entity list"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+
+        with open(filename) as f:
+            bodies = json.load(f)
+        if not bodies:
+            logging.error("Cannot read body from filename. Bye")
+            return
+        if not isinstance(bodies, list):
+            logging.error("A list json object was expected. Bye")
+            return
+        for body in bodies:
+            id = body["id"]
+            logging.debug(
+                "Updating resource {entity} with id {id}".format(entity=entity, id=id)
+            )
+            logging.debug(body)
+            result = qrs.driver.put(
+                "/qrs/{entity}/{id}".format(entity=entity, id=id), data=body
+            )
+            logging.debug(result)
+            logging.debug(result.json())
+
+    def get_entity(self, host, certificate, entity, count=False, filter="1 eq 1"):
         """Get entity list or count"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         if count:
