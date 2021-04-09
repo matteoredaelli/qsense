@@ -23,6 +23,20 @@ from pyqlikengine.engine import QixEngine
 from pyqlikengine.engine_app_api import EngineAppApi
 
 
+def connect_qix_engine(host, certfile, keyfile, ca_certs):
+    user_directory = "internal"
+    user_id = "sa_repository"
+    qixe = QixEngine(
+        url=host,
+        user_directory=user_directory,
+        user_id=user_id,
+        ca_certs=ca_certs,
+        certfile=certfile,
+        keyfile=keyfile,
+    )
+    return qixe
+
+
 class Qsense:
     """qsense is a python and command line tool for Qliksense administrators"""
 
@@ -182,19 +196,15 @@ class Qsense:
         )
 
     def get_app_script(self, host, certfile, keyfile, ca_certs, app_id):
-        """Extract teh ETL script from an app"""
-        user_directory = "internal"
-        user_id = "sa_repository"
-        qixe = QixEngine(
-            url=host,
-            user_directory=user_directory,
-            user_id=user_id,
-            ca_certs=ca_certs,
-            certfile=certfile,
-            keyfile=keyfile,
-        )
+        """Extract the ETL script from an app"""
+        qixe = connect_qix_engine(host, certfile, keyfile, ca_certs)
         script = qsense.apps.get_script(qixe, app_id)
         return script
+
+    def find_app_dataconnections(self, host, certfile, keyfile, ca_certs, app_id):
+        """Extract the dataconnections an app"""
+        script = self.get_app_script(host, certfile, keyfile, ca_certs, app_id)
+        return qsense.apps.extract_dataconnections_from_text(script)
 
     def update_custom_property_with_users_list(
         self,

@@ -24,6 +24,15 @@ from datetime import timedelta
 # import qsAPI
 
 
+def extract_dataconnections_from_text(text):
+    result = []
+    for r in ["LIB CONNECT TO [\['](.*?)[\]']", "[\[']lib://(.*?)[\]']"]:
+        reg = re.search(r, text)
+        if reg:
+            result = result + list(reg.groups())
+    return result
+
+
 def export_app(qrs, target_path, app, save_meta=True, skipdata=True):
     """Export an application to a qvd file and its definition to a json file"""
     logging.info("Exporting app: " + str(app))
