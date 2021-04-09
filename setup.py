@@ -20,7 +20,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="qsense",
-    version="0.5.8",
+    version="0.6.0",
     author="Matteo Redaelli",
     author_email="matteo.redaelli@gmail.com",
     description="qsense is a python library and a command line tool for qliksense",
@@ -36,6 +36,6 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Operating System :: OS Independent",
     ],
-    install_requires=["requests", "requests_ntlm", "qsapi", "fire"],
+    install_requires=["requests", "requests_ntlm", "qsapi", "pyqlikengine", "fire"],
     python_requires=">=3.6",
 )

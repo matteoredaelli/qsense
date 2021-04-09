@@ -19,6 +19,8 @@ import fire
 import json
 import qsAPI
 import qsense
+from pyqlikengine.engine import QixEngine
+from pyqlikengine.engine_app_api import EngineAppApi
 
 
 class Qsense:
@@ -79,7 +81,7 @@ class Qsense:
             logging.debug(body)
             result = qrs.driver.post("/qrs/{entity}".format(entity=entity), data=body)
             logging.debug(result)
-            logging.debug(result.json())
+            # logging.debug(result.json())
 
     def update_entity(self, host, certificate, entity, filename):
         """update entity list"""
@@ -178,6 +180,20 @@ class Qsense:
             export=export,
             delete=delete,
         )
+
+    def get_app_script(self, host, certfile, keyfile, ca_certs, app_id):
+        user_directory = "internal"
+        user_id = "sa_repository"
+        qixe = QixEngine(
+            url=host,
+            user_directory=user_directory,
+            user_id=user_id,
+            ca_certs=ca_certs,
+            certfile=certfile,
+            keyfile=keyfile,
+        )
+        script = qsense.apps.get_script(qixe, app_id)
+        return script
 
     def update_custom_property_with_users_list(
         self,

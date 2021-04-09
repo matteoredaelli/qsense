@@ -17,9 +17,11 @@ import logging
 import json
 import os
 import re
+import time
 from datetime import date
 from datetime import timedelta
-import qsAPI
+
+# import qsAPI
 
 
 def export_app(qrs, target_path, app, save_meta=True, skipdata=True):
@@ -53,6 +55,21 @@ def export_by_filter(
             skipdata=skipdata,
         )
     return apps
+
+
+def get_script(qixe, qDocId):
+    logging.debug(qDocId)
+    qixe.ega.open_doc(qDocId)
+    time.sleep(1)
+    doc = qixe.ega.get_active_doc()
+    logging.debug(doc)
+    if "qReturn" in doc and "qHandle" in doc["qReturn"]:
+        h = doc["qReturn"]["qHandle"]
+        logging.debug(qixe.eaa.get_all_infos(h))
+        return qixe.eaa.get_script(h)["qScript"]
+    else:
+        logging.error("not found or something strange appened")
+        return None
 
 
 def get_old_apps(qrs, modified_days, last_reload_days, published=False):
