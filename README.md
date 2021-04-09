@@ -44,8 +44,11 @@ Find old apps using 'modified_date' and 'last_reload_time' filters. Then you can
 
 	qsense find_old_apps qliksense.redaelli.org ~/certificates/client.pem  --target_path '/tmp' --modified_days=300 --last_reload_days=300
 
-
 	qsense find_old_apps qliksense.redaelli.org ~/certificates/client.pem  --modified_days=300 --last_reload_days=300 --mail_subject "qlik - you have an old app, please delete it" --mail_to matteo@example.com
+
+#### get_app_script
+
+Extract the ETL script from an application
 
 ### Custom properties
 
