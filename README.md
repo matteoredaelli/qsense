@@ -16,15 +16,29 @@ Look at the file qsense/command_line.py for details
 
 An entity can be for instance: user, dataconnection, stream, custompropertydefinition,..
 
+### GET
+
 Get all users
 
-	qsense  qrs_get_entity qliksense.redaelli.org ~/certificates/client.pem user
+	qsense get_entity qliksense.redaelli.org ~/certificates/client.pem user
 
 Count all apps using a filter
 
-	qsense  qrs_get_entity qliksense.redaelli.org ~/certificates/client.pem custompropertydefinition --full_or_count count --filter "name eq 'GroupAccess'"
+	qsense get_entity qliksense.redaelli.org ~/certificates/client.pem custompropertydefinition --full_or_count count --filter "name eq 'GroupAccess'"
 
-	qsense  qrs_get_entity qliksense.redaelli.org ~/certificates/client.pem app --full_or_count count --filter "published ne True"
+	qsense get_entity qliksense.redaelli.org ~/certificates/client.pem app --full_or_count count --filter "published ne True"
+
+### POST
+
+Update a user
+
+	qsense post_entity qliksense.redaelli.org ~/certificates/client.pem user jsonfile
+
+### PUT
+
+Add a new  dataconnection
+
+	qsense post_entity qliksense.redaelli.org ~/certificates/client.pem dataconnetion jsonfile
 
 ## Apps
 
