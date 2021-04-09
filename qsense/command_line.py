@@ -182,6 +182,7 @@ class Qsense:
         )
 
     def get_app_script(self, host, certfile, keyfile, ca_certs, app_id):
+        """Extract teh ETL script from an app"""
         user_directory = "internal"
         user_id = "sa_repository"
         qixe = QixEngine(
