@@ -121,17 +121,11 @@ class Qsense:
             logging.debug(result)
             logging.debug(result.json())
 
-    def get_entity(self, host, certificate, entity, count=False, filter="1 eq 1"):
-        """Get entity list or count"""
+    def get_entity(self, host, certificate, entity, id="full", filter=None):
+        """Get a specific entity by ID or entity list or count"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
-        if count:
-            full_or_count = "count"
-        else:
-            full_or_count = "full"
         result = qrs.driver.get(
-            "/qrs/{entity}/{full_or_count}".format(
-                entity=entity, full_or_count=full_or_count
-            ),
+            "/qrs/{entity}/{id}".format(entity=entity, id=id),
             {"filter": filter},
         ).json()
         print(json.dumps(result))
