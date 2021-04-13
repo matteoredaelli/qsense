@@ -96,6 +96,14 @@ Deallocate analyzer license fom users with a professional license
 
 	qsense deallocate_analyzer_licenses_for_professionals qliksense.redaelli.org ~/certificates/client.pem --nodryrun
 
+## System
+
+### healthcheck
+
+To extract cpu, memory usage and loaded apps in memory
+
+	qsense healtcheck ~/certificates/client.pem
+
 ##  Users
 
 ### delete_removed_exernally_users

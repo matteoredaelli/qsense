@@ -130,6 +130,12 @@ class Qsense:
         ).json()
         print(json.dumps(result))
 
+    def healthcheck(self, host, certificate, port=4747):
+        """Get a specific entity by ID or entity list or count"""
+        qps = qsAPI.QPS(proxy=host, certificate=certificate, port=port)
+        result = qps.driver.get("/healthcheck")
+        print(json.dumps(result.json()))
+
     def deallocate_unused_analyzer_licenses(self, host, certificate, days, dryrun=True):
         """Deallocate analyzer license not used for N days"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
