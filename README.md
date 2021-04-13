@@ -12,6 +12,10 @@ pip install qsense
 
 Look at the file qsense/command_line.py for details
 
+## Generic GET request
+
+	qsense get qliksense.redaelli.org ~/certificates/client.pem /qrs/license/accesstypeoverview
+
 ## Generic Entity
 
 An entity can be for instance: user, dataconnection, stream, custompropertydefinition,..

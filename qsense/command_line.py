@@ -40,6 +40,16 @@ def connect_qix_engine(host, certfile, keyfile, ca_certs):
 class Qsense:
     """qsense is a python and command line tool for Qliksense administrators"""
 
+    def get(self, host, certificate, path, port=4242):
+        """get http"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate, port=port)
+        ## find unpublished apps
+        resp = qrs.driver.get(path)
+        if resp.ok:
+            return json.dumps(resp.json())
+        else:
+            return resp
+
     def find_users_with_unpublished_apps(
         self,
         host,
