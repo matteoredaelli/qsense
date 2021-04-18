@@ -66,12 +66,22 @@ def export_by_filter(
     return apps
 
 
-def get_script(qixe, qDocId):
+def open_doc(qixe, qDocId):
+    logging.debug(qDocId)
+    return qixe.ega.open_doc(qDocId)
+
+
+def get_doc(qixe, qDocId):
     logging.debug(qDocId)
     qixe.ega.open_doc(qDocId)
     time.sleep(1)
     doc = qixe.ega.get_active_doc()
     logging.debug(doc)
+    return doc
+
+
+def get_script(qixe, qDocId):
+    doc = get_doc(qixe, qDocId)
     if "qReturn" in doc and "qHandle" in doc["qReturn"]:
         h = doc["qReturn"]["qHandle"]
         logging.debug(qixe.eaa.get_all_infos(h))

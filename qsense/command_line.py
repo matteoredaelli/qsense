@@ -38,10 +38,10 @@ def connect_qix_engine(host, certfile, keyfile, ca_certs):
 
 
 class Qsense:
-    """qsense is a python and command line tool for Qliksense administrators"""
+    """qsense is a python library and command line tool for Qliksense administrators"""
 
     def get(self, host, certificate, path, port=4242):
-        """get http"""
+        """generic get http from Qlik (qrs, qps,..)"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate, port=port)
         ## find unpublished apps
         resp = qrs.driver.get(path)
@@ -83,7 +83,7 @@ class Qsense:
                 logging.info("%s: %d" % (u, count))
 
     def add_entity(self, host, certificate, entity, filename, newid=False):
-        """add entity list"""
+        """add a new entity (user, stream, dataconnection,...)"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
 
         with open(filename) as f:
@@ -108,7 +108,7 @@ class Qsense:
             # logging.debug(result.json())
 
     def update_entity(self, host, certificate, entity, filename):
-        """update entity list"""
+        """update an entity (user, stream, dataconnection,...)"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
 
         with open(filename) as f:
@@ -205,7 +205,13 @@ class Qsense:
             delete=delete,
         )
 
-    def get_app_script(self, host, certfile, keyfile, ca_certs, app_id):
+    def open_doc(self, host, certfile, keyfile, ca_certs, app_id):
+        """load the app in memory"""
+        qixe = connect_qix_engine(host, certfile, keyfile, ca_certs)
+        result = qsense.apps.open_doc(qixe, app_id)
+        return result
+
+    def app_get_script(self, host, certfile, keyfile, ca_certs, app_id):
         """Extract the ETL script from an app"""
         qixe = connect_qix_engine(host, certfile, keyfile, ca_certs)
         script = qsense.apps.get_script(qixe, app_id)

@@ -12,106 +12,125 @@ pip install qsense
 
 Look at the file qsense/command_line.py for details
 
-## Generic GET request
+```
+NAME
+	qsense - qsense is a python and command line tool for Qliksense administrators
 
-	qsense get qliksense.redaelli.org ~/certificates/client.pem /qrs/license/accesstypeoverview
+SYNOPSIS
+	qsense COMMAND
 
-## Generic Entity
+DESCRIPTION
+	qsense is a python and command line tool for Qliksense administrators
 
-An entity can be for instance: user, dataconnection, stream, custompropertydefinition,..
+COMMANDS
+	COMMAND is one of the following:
 
-### GET
+	 add_entity
+	   add entity list
 
-Get all users
+	 app_get_script
+	   Extract the ETL script from an app
 
-	qsense get_entity qliksense.redaelli.org ~/certificates/client.pem user
+	 deallocate_analyzer_licenses_for_professionals
+	   Deallocate analyzer license fom users with a professional license
 
-Count all apps using a filter
+	 deallocate_unused_analyzer_licenses
+	   Deallocate analyzer license not used for N days
 
-	qsense get_entity qliksense.redaelli.org ~/certificates/client.pem custompropertydefinition --full_or_count count --filter "name eq 'GroupAccess'"
+	 delete_removed_exernally_users
+	   Delete users that were removed externally (from active directory?)
 
-	qsense get_entity qliksense.redaelli.org ~/certificates/client.pem app --full_or_count count --filter "published ne True"
+	 export_apps
+	   Export (published or passing any other filter) applications to qvd files
 
-### POST
+	 export_users
+	   Export users and his/her groups
 
-Update a user
+	 find_app_dataconnections
+	   Extract the dataconnections an app
 
-	qsense post_entity qliksense.redaelli.org ~/certificates/client.pem user jsonfile
+	 find_old_apps
+	   Find old apps using 'modified_date' and 'last_reload_time' filters: then you can export them or delete or notify via email the owners
 
-### PUT
+	 find_users_with_unpublished_apps
+	   Find users with too many unpublished apps
 
-Add a new  dataconnection
+	 get
+	   generic get http
 
-	qsense post_entity qliksense.redaelli.org ~/certificates/client.pem dataconnetion jsonfile
+	 get_entity
+	   Get a specific entity by ID or entity list or count
 
-## Apps
+	 healthcheck
+	   Get a specific entity by ID or entity list or count
 
-### export_apps
+	 open_doc
+	   load the app in memory
 
-Export (published or passing any other filter) applications to qvd files
+	 update_custom_property_with_users_list
+	   update the value of a custom property with the list of all qliksense users
 
-	qsense export_apps qliksense.redaelli.org ~/certificates/client.pem  --target_path '/tmp' --filter "published eq true"
+	 update_entity
+	   update entity list
+matteo@debian:~/src/github/qsense$ qsense > a
+matteo@debian:~/src/github/qsense$ cat a
+NAME
+	qsense - qsense is a python library and command line tool for Qliksense administrators
 
-### find_users_with_unpublished_apps
+SYNOPSIS
+	qsense COMMAND
 
-Find users with too many unpublished apps in their work area
+DESCRIPTION
+	qsense is a python library and command line tool for Qliksense administrators
 
-	qsense find_users_with_unpublished_apps qliksense.redaelli.org ~/certificates/client.pem --threshold 50
+COMMANDS
+	COMMAND is one of the following:
 
-### find_old_apps
+	 add_entity
+	   add a new entity (user, stream, dataconnection,...)
 
-Find old apps using 'modified_date' and 'last_reload_time' filters. Then you can export them or delete or notify via email the owners
+	 app_get_script
+	   Extract the ETL script from an app
 
-	qsense find_old_apps qliksense.redaelli.org ~/certificates/client.pem  --target_path '/tmp' --modified_days=300 --last_reload_days=300
+	 deallocate_analyzer_licenses_for_professionals
+	   Deallocate analyzer license fom users with a professional license
 
-	qsense find_old_apps qliksense.redaelli.org ~/certificates/client.pem  --modified_days=300 --last_reload_days=300 --mail_subject "qlik - you have an old app, please delete it" --mail_to matteo@example.com
+	 deallocate_unused_analyzer_licenses
+	   Deallocate analyzer license not used for N days
 
-### get_app_script
+	 delete_removed_exernally_users
+	   Delete users that were removed externally (from active directory?)
 
-Extract the ETL script from an application
+	 export_apps
+	   Export (published or passing any other filter) applications to qvd files
 
-		qsense get_app_script qliksense.redaelli.org ~/certificates/client.pem  ~/certificates/client_key.pem  ~/certificates/root.pem 814b2649-3f40-468f-b20b-9998db83c521
+	 export_users
+	   Export users and his/her groups
 
-### find_app_dataconnetions
+	 find_app_dataconnections
+	   Extract the dataconnections an app
 
-Extract the dataconnections from the ETL script.
+	 find_old_apps
+	   Find old apps using 'modified_date' and 'last_reload_time' filters: then you can export them or delete or notify via email the owners
 
-	qsense find_app_dataconnections qliksense.redaelli.org ~/certificates/client.pem  ~/certificates/client_key.pem  ~/certificates/root.pem 814b2649-3f40-468f-b20b-9998db83c521
+	 find_users_with_unpublished_apps
+	   Find users with too many unpublished apps
 
-## Custom properties
+	 get
+	   generic get http from Qlik (qrs, qps,..)
 
-### update_custom_property_with_users_list
+	 get_entity
+	   Get a specific entity by ID or entity list or count
 
-Update the value of a custom property (usually "UserAccess") with the list of all qliksense users.
+	 healthcheck
+	   Get a specific entity by ID or entity list or count
 
-	qsense update_custom_property_with_users_list qliksense.redaelli.org ~/certificates/client.pem UserAccess GROUP --nodryrun
+	 open_doc
+	   load the app in memory
 
-## Licenses
+	 update_custom_property_with_users_list
+	   update the value of a custom property with the list of all qliksense users
 
-### deallocate_unused_analyzer_licenses
-
-Deallocate not used (by N days) analyzer licenses
-
-	qsense deallocate_unused_analyzer_licenses qliksense.redaelli.org ~/certificates/client.pem --nodryrun
-
-### deallocate_analyzer_licenses_for_professionals
-
-Deallocate analyzer license fom users with a professional license
-
-	qsense deallocate_analyzer_licenses_for_professionals qliksense.redaelli.org ~/certificates/client.pem --nodryrun
-
-## System
-
-### healthcheck
-
-To extract cpu, memory usage and loaded apps in memory
-
-	qsense healtcheck ~/certificates/client.pem
-
-##  Users
-
-### delete_removed_exernally_users
-
-Delete users that were removed externally (from active directory?)
-
-	qsense delete_removed_exernally_users qliksense.redaelli.org ~/certificates/client.pem GROUP --nodryrun
+	 update_entity
+	   update an entity (user, stream, dataconnection,...)
+```
