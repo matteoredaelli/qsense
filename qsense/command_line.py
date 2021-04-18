@@ -18,14 +18,14 @@ import json
 import logging
 import fire
 import qsAPI
-import qsense
 from pyqlikengine.engine import QixEngine
-from pyqlikengine.engine_app_api import EngineAppApi
+import qsense
 
 
-def connect_qix_engine(host, certfile, keyfile, ca_certs):
-    user_directory = "internal"
-    user_id = "sa_repository"
+def connect_qix_engine(host, certfile, keyfile, ca_certs, user_directory, user_id):
+    """connect to the qix engine"""
+    user_directory = user_directory
+    user_id = user_id
     qixe = QixEngine(
         url=host,
         user_directory=user_directory,
@@ -202,21 +202,54 @@ class Qsense:
             delete=delete,
         )
 
-    def open_doc(self, host, certfile, keyfile, ca_certs, app_id):
+    def open_doc(
+        self,
+        host,
+        certfile,
+        keyfile,
+        ca_certs,
+        app_id,
+        user_directory="internal",
+        user_id="sa_repository",
+    ):
         """Load an app in memory, useful for preloading an app / cacha warmer"""
-        qixe = connect_qix_engine(host, certfile, keyfile, ca_certs)
+        qixe = connect_qix_engine(
+            host, certfile, keyfile, ca_certs, user_directory, user_id
+        )
         result = qsense.apps.open_doc(qixe, app_id)
         return result
 
-    def get_app_script(self, host, certfile, keyfile, ca_certs, app_id):
+    def get_app_script(
+        self,
+        host,
+        certfile,
+        keyfile,
+        ca_certs,
+        app_id,
+        user_directory="internal",
+        user_id="sa_repository",
+    ):
         """Extract the ETL script from an app"""
-        qixe = connect_qix_engine(host, certfile, keyfile, ca_certs)
+        qixe = connect_qix_engine(
+            host, certfile, keyfile, ca_certs, user_directory, user_id
+        )
         script = qsense.apps.get_script(qixe, app_id)
         return script
 
-    def get_app_dataconnections(self, host, certfile, keyfile, ca_certs, app_id):
+    def get_app_dataconnections(
+        self,
+        host,
+        certfile,
+        keyfile,
+        ca_certs,
+        app_id,
+        user_directory="internal",
+        user_id="sa_repository",
+    ):
         """Extract the dataconnections found in the app script"""
-        script = self.app_get_script(host, certfile, keyfile, ca_certs, app_id)
+        script = self.app_get_script(
+            host, certfile, keyfile, ca_certs, app_id, user_directory, user_id
+        )
         return qsense.apps.extract_dataconnections_from_text(script)
 
     def update_custom_property_with_users_list(
