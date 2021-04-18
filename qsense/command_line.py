@@ -172,10 +172,10 @@ class Qsense:
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         qsense.apps.export_by_filter(qrs, target_path=target_path, pFilter=filter)
 
-    def export_users(self, host, certificate):
-        """Export users and his/her groups"""
+    def get_users(self, host, certificate):
+        """Get users with groups"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
-        qsense.users.export_users_and_groups(qrs)
+        qsense.users.get_users_and_groups(qrs)
 
     def find_old_apps(
         self,
@@ -206,20 +206,20 @@ class Qsense:
         )
 
     def open_doc(self, host, certfile, keyfile, ca_certs, app_id):
-        """load the app in memory"""
+        """Load an app in memory, useful for preloading an app / cacha warmer"""
         qixe = connect_qix_engine(host, certfile, keyfile, ca_certs)
         result = qsense.apps.open_doc(qixe, app_id)
         return result
 
-    def app_get_script(self, host, certfile, keyfile, ca_certs, app_id):
+    def get_app_script(self, host, certfile, keyfile, ca_certs, app_id):
         """Extract the ETL script from an app"""
         qixe = connect_qix_engine(host, certfile, keyfile, ca_certs)
         script = qsense.apps.get_script(qixe, app_id)
         return script
 
-    def find_app_dataconnections(self, host, certfile, keyfile, ca_certs, app_id):
+    def get_app_dataconnections(self, host, certfile, keyfile, ca_certs, app_id):
         """Extract the dataconnections an app"""
-        script = self.get_app_script(host, certfile, keyfile, ca_certs, app_id)
+        script = self.app_get_script(host, certfile, keyfile, ca_certs, app_id)
         return qsense.apps.extract_dataconnections_from_text(script)
 
     def update_custom_property_with_users_list(

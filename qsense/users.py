@@ -59,7 +59,7 @@ def delete_removed_exernally_users(qrs, user_directory, dryrun=True):
             qrs.UserDelete(u["id"])
 
 
-def export_users_and_groups(
+def get_users_and_groups(
     qrs,
     pFilter="removedExternally ne True",
     pUserID="full",
