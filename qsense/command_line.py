@@ -14,9 +14,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import json
 import logging
 import fire
-import json
 import qsAPI
 import qsense
 from pyqlikengine.engine import QixEngine
@@ -72,9 +72,6 @@ class Qsense:
         users_freq = qsense.utils.count_frequency(users)
         ## filter highest values
         threshold = int(threshold)
-        ##users_subset = dict(
-        ##    filter(lambda elem: elem[1] > threshold, users_freq.items())
-        ##)
 
         for u, count in users_freq.items():
             u_name = u.split("|")[0]
@@ -218,7 +215,7 @@ class Qsense:
         return script
 
     def get_app_dataconnections(self, host, certfile, keyfile, ca_certs, app_id):
-        """Extract the dataconnections an app"""
+        """Extract the dataconnections found in the app script"""
         script = self.app_get_script(host, certfile, keyfile, ca_certs, app_id)
         return qsense.apps.extract_dataconnections_from_text(script)
 
@@ -231,7 +228,7 @@ class Qsense:
         dryrun=True,
         threshold=100,
     ):
-        """update the value of a custom property with the list of all qliksense users"""
+        """update the values of a custom property with the list of all qliksense users"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         return qsense.custom_property.update_custom_property_with_users_list(
             qrs, custom_property_name, user_directory, dryrun, threshold
