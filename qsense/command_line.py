@@ -48,7 +48,7 @@ class Qsense:
             qrs = qsAPI.QRS(proxy=host, certificate=certificate, port=port)
 
         resp = qrs.driver.get(path)
-        print(resp)
+        # print(resp)
         if resp.ok:
             return json.dumps(resp.json())
         else:
@@ -62,7 +62,7 @@ class Qsense:
 
         ##        for vp in virtualproxy:
         vp = virtualproxy
-        print("Virtual proxy '{vp}'".format(vp=vp))
+        logging.info("Virtual proxy '{vp}'".format(vp=vp))
         path = "/qps/{vp}/user/{userdirectory}/{userid}".format(
             vp=vp, userdirectory=userdirectory, userid=userid
         )
