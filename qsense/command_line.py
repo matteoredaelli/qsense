@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+"""Command line
+"""
 import json
 import logging
 import fire
@@ -24,8 +26,6 @@ import qsense
 
 def connect_qix_engine(host, certfile, keyfile, ca_certs, user_directory, user_id):
     """connect to the qix engine"""
-    user_directory = user_directory
-    user_id = user_id
     qixe = QixEngine(
         url=host,
         user_directory=user_directory,
@@ -40,17 +40,40 @@ def connect_qix_engine(host, certfile, keyfile, ca_certs, user_directory, user_i
 class Qsense:
     """qsense is a python library and command line tool for Qliksense administrators"""
 
-    def get(self, host, certificate, path, port=4242):
-        """generic get http from Qlik (qrs, qps,..)"""
-        qrs = qsAPI.QRS(proxy=host, certificate=certificate, port=port)
-        ## find unpublished apps
+    def get(self, host, certificate, path, service="qrs", port=4242):
+        """generic get http from Qlik (service can be qrs or qps)"""
+        if service.upper() == "QPS":
+            qrs = qsAPI.QPS(proxy=host, certificate=certificate, port=port)
+        else:
+            qrs = qsAPI.QRS(proxy=host, certificate=certificate, port=port)
+
         resp = qrs.driver.get(path)
+        print(resp)
         if resp.ok:
             return json.dumps(resp.json())
         else:
             return resp
 
-    def find_users_with_unpublished_apps(
+    def user_sessions(
+        self, host, certificate, userdirectory, userid, virtualproxy="", port=4243
+    ):
+        """user sessions"""
+        qps = qsAPI.QPS(proxy=host, certificate=certificate, port=port)
+
+        ##        for vp in virtualproxy:
+        vp = virtualproxy
+        print("Virtual proxy '{vp}'".format(vp=vp))
+        path = "/qps/{vp}/user/{userdirectory}/{userid}".format(
+            vp=vp, userdirectory=userdirectory, userid=userid
+        )
+        resp = qps.driver.get(path)
+        # print(resp)
+        if resp.ok:
+            return json.dumps(resp.json())
+        else:
+            return resp
+
+    def users_with_unpublished_apps(
         self,
         host,
         certificate,
@@ -128,7 +151,7 @@ class Qsense:
             logging.debug(result)
             logging.debug(result.json())
 
-    def get_entity(self, host, certificate, entity, id="full", filter=None):
+    def entity(self, host, certificate, entity, id="full", filter=None):
         """Get a specific entity by ID or entity list or count"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         result = qrs.driver.get(
@@ -169,7 +192,7 @@ class Qsense:
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         qsense.apps.export_by_filter(qrs, target_path=target_path, pFilter=filter)
 
-    def get_users(self, host, certificate):
+    def users(self, host, certificate):
         """Get users with groups"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         qsense.users.get_users_and_groups(qrs)
@@ -251,6 +274,26 @@ class Qsense:
             host, certfile, keyfile, ca_certs, app_id, user_directory, user_id
         )
         return qsense.apps.extract_dataconnections_from_text(script)
+
+    ## TODO / CHECK should return onle teh data connections of the app
+    ## but I gget back all data connections
+
+    def get_app_connections(
+        self,
+        host,
+        certfile,
+        keyfile,
+        ca_certs,
+        app_id,
+        user_directory="internal",
+        user_id="sa_repository",
+    ):
+        """Extract the connections from an app"""
+        qixe = connect_qix_engine(
+            host, certfile, keyfile, ca_certs, user_directory, user_id
+        )
+        result = qsense.apps.get_connections(qixe, app_id)
+        return json.dumps(result)
 
     def update_custom_property_with_users_list(
         self,

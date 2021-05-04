@@ -80,6 +80,17 @@ def get_doc(qixe, qDocId):
     return doc
 
 
+def get_connections(qixe, qDocId):
+    doc = get_doc(qixe, qDocId)
+    if "qReturn" in doc and "qHandle" in doc["qReturn"]:
+        h = doc["qReturn"]["qHandle"]
+        logging.debug(qixe.eaa.get_all_infos(h))
+        return qixe.eaa.get_connections(h)
+    else:
+        logging.error("not found or something strange appened")
+        return None
+
+
 def get_script(qixe, qDocId):
     doc = get_doc(qixe, qDocId)
     if "qReturn" in doc and "qHandle" in doc["qReturn"]:
