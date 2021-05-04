@@ -81,7 +81,7 @@ class Qsense:
 
         logging.info("Virtual proxy '{virtualproxy}'".format(virtualproxy=virtualproxy))
         path = "/qps/{virtualproxy}/session/{session}".format(
-            virtualproxy=virtualproxy, userdirectory=userdirectory, session=session
+            virtualproxy=virtualproxy, session=session
         )
         resp = qps.driver.delete(path)
         logging.info(resp)
