@@ -73,6 +73,19 @@ class Qsense:
         else:
             return resp
 
+    def delete_user_session(
+        self, host, certificate, session, virtualproxy="", port=4243
+    ):
+        """delete user session"""
+        qps = qsAPI.QPS(proxy=host, certificate=certificate, port=port)
+
+        logging.info("Virtual proxy '{virtualproxy}'".format(virtualproxy=virtualproxy))
+        path = "/qps/{virtualproxy}/session/{session}".format(
+            virtualproxy=virtualproxy, userdirectory=userdirectory, session=session
+        )
+        resp = qps.driver.delete(path)
+        logging.info(resp)
+
     def users_with_unpublished_apps(
         self,
         host,
@@ -197,7 +210,7 @@ class Qsense:
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         qsense.users.get_users_and_groups(qrs)
 
-    def find_old_apps(
+    def old_apps(
         self,
         host,
         certificate,
