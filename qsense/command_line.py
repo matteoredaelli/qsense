@@ -48,7 +48,21 @@ class Qsense:
             qrs = qsAPI.QRS(proxy=host, certificate=certificate, port=port)
 
         resp = qrs.driver.get(path)
-        # print(resp)
+        if resp.ok:
+            return json.dumps(resp.json())
+        else:
+            return resp
+
+    def post(self, host, certificate, path, service="qrs", port=4242, body=""):
+        """NOT TESTED: generic post http to Qlik (service can be qrs or qps)"""
+        logging.debug("Body= {body}".format(body=body))
+        if service.upper() == "QPS":
+            qrs = qsAPI.QPS(proxy=host, certificat=certificate, port=port)
+        else:
+            qrs = qsAPI.QRS(proxy=host, certificate=certificate, port=port)
+
+        resp = qrs.driver.post(path, data=body)
+        logging.debug(resp)
         if resp.ok:
             return json.dumps(resp.json())
         else:

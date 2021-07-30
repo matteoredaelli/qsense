@@ -66,6 +66,10 @@ def export_by_filter(
     return apps
 
 
+## https://gist.github.com/clintcarr/d0a8bb6e15cb6c9a3472d424c344ce73
+## qlik api could be directly
+
+
 def open_doc(qixe, qDocId):
     logging.debug(qDocId)
     return qixe.ega.open_doc(qDocId)
