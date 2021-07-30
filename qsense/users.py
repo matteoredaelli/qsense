@@ -70,12 +70,16 @@ def get_users_and_groups(
     users = qrs.UserGet(pFilter=pFilter, pUserID=pUserID)
     for u in users:
         if "attributes" in u.keys():
+            mail = extract_mail(u)
             for a in u["attributes"]:
                 groupname = a["attributeValue"]
                 if re.match(groupFilter, groupname, re.IGNORECASE):
                     print(
-                        "{name}{sep}{groupname}\n".format(
-                            name=u[userAttribute], groupname=groupname, sep=sep
+                        "{name}{sep}{mail}{sep}{groupname}\n".format(
+                            name=u[userAttribute],
+                            groupname=groupname,
+                            sep=sep,
+                            mail=mail,
                         )
                     )
 
