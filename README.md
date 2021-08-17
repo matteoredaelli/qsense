@@ -24,5 +24,5 @@ qsense get_entity qlikserver.redaelli.org client.pem dataconnection --filter "co
 
 sed  -e 's/amznfsx94rgsb1e/amznfsxe9chyjel/g' ${JSONFILE} > new-${JSONFILE}
 
-qsense update_entity pqlkapp067-05ww.applications.pirelli.com client.pem dataconnection new-${JSONFILE}
+qsense update_entity qlikserver.redaelli.org client.pem dataconnection new-${JSONFILE}
 ```
