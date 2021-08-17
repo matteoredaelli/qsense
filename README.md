@@ -11,3 +11,18 @@ pip install qsense
 # Usage
 
 Look at USAGE.txt file or the source file qsense/command_line.py for details.
+
+# Examples
+
+## Changing all data connection after a file server migration
+
+```bash
+JSONFILE=ds-shares.json
+rm $JSONFILE
+
+qsense get_entity pqlkapp067-05ww.applications.pirelli.com client.pem dataconnection --filter "connectionstring sw '\\\\\\\amzn'" | jq '.' > $JSONFILE
+
+sed  -e 's/amznfsx94rgsb1e/amznfsxe9chyjel/g' ${JSONFILE} > new-${JSONFILE}
+
+qsense update_entity pqlkapp067-05ww.applications.pirelli.com client.pem dataconnection new-${JSONFILE}
+```
