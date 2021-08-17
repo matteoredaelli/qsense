@@ -14,7 +14,7 @@ Look at USAGE.txt file or the source file qsense/command_line.py for details.
 
 # Examples
 
-## Changing all data connection after a file server migration
+## Changing all data connections after a file server migration
 
 ```bash
 JSONFILE=ds-shares.json
