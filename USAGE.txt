@@ -2,7 +2,7 @@
     qsense - qsense is a python library and command line tool for Qliksense administrators
 
 [1mSYNOPSIS[0m
-    qsense [4mCOMMAND[0m
+    qsense - [4mCOMMAND[0m
 
 [1mDESCRIPTION[0m
     qsense is a python library and command line tool for Qliksense administrators
@@ -51,6 +51,9 @@
 
      open_doc
        Load an app in memory, useful for preloading an app / cacha warmer
+
+     post
+       NOT TESTED: generic post http to Qlik (service can be qrs or qps)
 
      update_custom_property_with_users_list
        update the values of a custom property with the list of all qliksense users
