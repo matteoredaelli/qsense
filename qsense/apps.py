@@ -36,7 +36,7 @@ def extract_dataconnections_from_text(text):
 def export_app(qrs, target_path, app, save_meta=True, skipdata=True):
     """Export an application to a qvd file and its definition to a json file"""
     logging.info("Exporting app: " + str(app))
-    if "stream" in app and "name" in app["name"]:
+    if "stream" in app and "name" in app["stream"]:
         filename = app["stream"]["name"]
     else:
         filename = ""
