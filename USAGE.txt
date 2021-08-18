@@ -2,7 +2,7 @@
     qsense - qsense is a python library and command line tool for Qliksense administrators
 
 [1mSYNOPSIS[0m
-    qsense - [4mCOMMAND[0m
+    qsense [4mCOMMAND[0m
 
 [1mDESCRIPTION[0m
     qsense is a python library and command line tool for Qliksense administrators
