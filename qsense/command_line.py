@@ -16,6 +16,7 @@
 
 """Command line
 """
+from datetime import datetime
 import json
 import logging
 import fire
@@ -176,7 +177,9 @@ class Qsense:
                 "/qrs/{entity}/{id}".format(entity=entity, id=id), data=body
             )
             logging.debug(result)
-            logging.debug(result.json())
+            out = result.json()
+
+            logging.debug(out)
 
     def entity(self, host, certificate, entity, id="full", filter=None):
         """Get a specific entity by ID or entity list or count"""
@@ -191,7 +194,10 @@ class Qsense:
         """Get a specific entity by ID or entity list or count"""
         qps = qsAPI.QPS(proxy=host, certificate=certificate, port=port)
         result = qps.driver.get("/healthcheck")
-        print(json.dumps(result.json()))
+        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        out = result.json()
+        out["now"] = now
+        print(json.dumps(out))
 
     def deallocate_unused_analyzer_licenses(self, host, certificate, days, dryrun=True):
         """Deallocate analyzer license not used for N days"""
