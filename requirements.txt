@@ -1,3 +1,4 @@
+pytz
 requests
 requests_ntml
 qsapi
