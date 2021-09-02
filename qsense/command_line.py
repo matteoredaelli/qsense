@@ -16,10 +16,11 @@
 
 """Command line
 """
+import re
 from datetime import datetime
-import pytz
 import json
 import logging
+import pytz
 import fire
 import qsAPI
 from pyqlikengine.engine import QixEngine
@@ -197,6 +198,7 @@ class Qsense:
         result = qps.driver.get("/healthcheck")
         tzinf = pytz.timezone(tz)
         now = format(datetime.now(tzinf))
+        now = re.sub(" ", "T", re.sub("[-:]", "", now))
         out = result.json()
         out["now"] = now
         print(json.dumps(out))
