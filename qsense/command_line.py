@@ -17,6 +17,7 @@
 """Command line
 """
 from datetime import datetime
+import pytz
 import json
 import logging
 import fire
@@ -190,11 +191,12 @@ class Qsense:
         ).json()
         print(json.dumps(result))
 
-    def healthcheck(self, host, certificate, port=4747):
+    def healthcheck(self, host, certificate, port=4747, tz="UTC"):
         """Get a specific entity by ID or entity list or count"""
         qps = qsAPI.QPS(proxy=host, certificate=certificate, port=port)
         result = qps.driver.get("/healthcheck")
-        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        tzinf = pytz.timezone(tz)
+        now = format(datetime.now(tzinf))
         out = result.json()
         out["now"] = now
         print(json.dumps(out))
