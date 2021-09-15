@@ -56,7 +56,7 @@ class Qsense:
         else:
             return resp
 
-    def post(self, host, certificate, path, service="qrs", port=4242, body=""):
+    def post(self, host, certificate, path, service="qrs", port=4242, body=None, filename=None):
         """NOT TESTED: generic post http to Qlik (service can be qrs or qps)"""
         logging.debug("Body= {body}".format(body=body))
         if service.upper() == "QPS":
@@ -64,7 +64,15 @@ class Qsense:
         else:
             qrs = qsAPI.QRS(proxy=host, certificate=certificate, port=port)
 
-        resp = qrs.driver.post(path, data=body)
+        data = "{}"
+
+        if filename:
+            with open (filename, "r") as myfile:
+                data = myfile.read().replace('\n', '')
+        elif body:
+            data = body
+        logging.debug(data)
+        resp = qrs.driver.post(path, data=data)
         logging.debug(resp)
         if resp.ok:
             return json.dumps(resp.json())
