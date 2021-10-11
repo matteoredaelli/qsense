@@ -1,4 +1,5 @@
 pytz
+ldap3
 requests
 requests_ntml
 qsapi
