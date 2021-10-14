@@ -23,7 +23,6 @@ import logging
 import pytz
 import fire
 import qsAPI
-import pyqlikengine
 from pyqlikengine.engine import QixEngine
 import qsense
 
