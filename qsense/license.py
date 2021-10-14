@@ -23,16 +23,18 @@ from datetime import date
 from datetime import timedelta
 import qsAPI
 
+
 def deallocate_unused_analyzer_licenses(qrs, days, dryrun=True):
-    """ deallocate_unused_analyzer_licenses """
+    """deallocate_unused_analyzer_licenses"""
     today = date.today()
     last_used = (today - timedelta(days=days)).strftime("%Y-%m-%d %H:%M:%S")
-    logging.debug("Last used date = " + last_used)
+    logging.debug(f"Last used date = {last_used}")
 
-    pFilter = "lastUsed lt '{last_used}'".format(last_used=last_used)
+    pFilter = f"lastUsed lt '{last_used}'"
     logging.debug("Searching licenses with pFilter= " + str(pFilter))
     analyzers = qrs.driver.get("/qrs/license/analyzeraccesstype/full").json()
     logging.debug("Found %d Analyzer licenses" % len(analyzers))
+
     for u in analyzers:
         logging.warning("removing analyzer license for user %s" % u["user"]["name"])
         if not dryrun:

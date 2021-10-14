@@ -102,7 +102,7 @@ def get_script(qixe, qDocId):
         logging.debug(qixe.eaa.get_all_infos(h))
         return qixe.eaa.get_script(h)["qScript"]
     else:
-        logging.error("not found or something strange appened")
+        logging.error("not found or something strange happened")
         return None
 
 
@@ -117,9 +117,7 @@ def get_old_apps(qrs, modified_days, last_reload_days, published=False):
         "%Y-%m-%d %H:%M:%S"
     )
     logging.debug("Last reload time = " + last_reload_time)
-    pFilter = "published eq {published} and modifiedDate lt '{modified}' and lastReloadTime lt '{reload}'".format(
-        published=published, modified=modified_date, reload=last_reload_time
-    )
+    pFilter = f"published eq {published} and modifiedDate lt '{modified_date}' and lastReloadTime lt '{last_reload_time}'"
     logging.debug("Search apps with pFilter= " + str(pFilter))
     apps = qrs.AppGet(pFilter=pFilter)
     ##l = map(lambda a: { key:value for key,value in a.items()

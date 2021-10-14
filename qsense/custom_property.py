@@ -25,7 +25,7 @@ def update_custom_property_with_users_list(
     """
     result = qrs.driver.get(
         "/qrs/custompropertydefinition/full",
-        {"filter": "name eq '{name}'".format(name=custom_property_name)},
+        {"filter": f"name eq '{custom_property_name}'"},
     ).json()
     assert len(result) == 1
     user_access = result[0]
@@ -37,16 +37,12 @@ def update_custom_property_with_users_list(
     )
     logging.info("extracting all qliksense users...")
     users = qrs.UserGet(
-        pFilter="userDirectory eq '{directory}' and removedExternally eq False".format(
-            directory=user_directory
-        )
+        pFilter=f"userDirectory eq '{user_directory}' and removedExternally eq False"
     )
     logging.info("Found {tot} users".format(tot=len(users)))
     if len(users) < check_count:
         logging.warning(
-            "The custom poperty will not be updated: too few users, the threshold is {threshold}".format(
-                threshold=threshold
-            )
+            f"The custom poperty will not be updated: too few users, the threshold is {threshold}"
         )
         return
     names = list(map(lambda u: u["userId"], users))

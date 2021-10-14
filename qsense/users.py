@@ -20,7 +20,7 @@ import qsAPI
 
 def extract_mail(u):
     """Extract the mail attribute from the user dictionary"""
-    logging.debug("Extract mail from user %s" % str(u))
+    logging.debug(f"Extract mail from user {u}")
     if not u:
         logging.error("User is empty")
         return None
@@ -41,7 +41,7 @@ def extract_mail(u):
 def find_mail_from_user_id(qrs, id):
     users = qrs.UserGet(pFilter="id eq %s" % id)
     if len(users) != 1:
-        logging.error("Cannot find a user with ID=%" % id)
+        logging.error(f"Cannot find a user with ID={id}")
         mail = None
     else:
         mail = extract_mail(users[0])
@@ -50,7 +50,7 @@ def find_mail_from_user_id(qrs, id):
 
 def delete_removed_exernally_users(qrs, user_directory, dryrun=True):
     users = qrs.UserGet(
-        pFilter="userDirectory eq '%s' and removedExternally eq True" % user_directory
+        pFilter=f"userDirectory eq '{user_directory}' and removedExternally eq True"
     )
     logging.warning("Users to be deleted: %s" % len(users))
     for u in users:
@@ -88,5 +88,5 @@ def user_sessions(hosts, certificate, usergroup, userid, vproxies=""):
     for server in hosts.split(","):
         for vproxy in vproxies.split(","):
             qps = qsAPI.QPS(proxy=server, certificate=certificate)
-            print(server + " : " + vproxy)
+            print(f"{server}  : {vproxy}")
             print(qps.GetUser(usergroup, user).json())

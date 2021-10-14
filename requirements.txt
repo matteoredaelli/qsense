@@ -1,7 +1,7 @@
 pytz
 ldap3
 requests
-requests_ntml
+requests_ntlm
 qsapi
 pyqlikengine
 fire

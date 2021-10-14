@@ -23,6 +23,7 @@ import logging
 import pytz
 import fire
 import qsAPI
+import pyqlikengine
 from pyqlikengine.engine import QixEngine
 import qsense
 
@@ -56,7 +57,16 @@ class Qsense:
         else:
             return resp
 
-    def post(self, host, certificate, path, service="qrs", port=4242, body=None, filename=None):
+    def post(
+        self,
+        host,
+        certificate,
+        path,
+        service="qrs",
+        port=4242,
+        body=None,
+        filename=None,
+    ):
         """NOT TESTED: generic post http to Qlik (service can be qrs or qps)"""
         logging.debug("Body= {body}".format(body=body))
         if service.upper() == "QPS":
@@ -67,8 +77,8 @@ class Qsense:
         data = "{}"
 
         if filename:
-            with open (filename, "r") as myfile:
-                data = myfile.read().replace('\n', '')
+            with open(filename, "r") as myfile:
+                data = myfile.read().replace("\n", "")
         elif body:
             data = body
         logging.debug(data)
@@ -87,10 +97,9 @@ class Qsense:
 
         ##        for vp in virtualproxy:
         vp = virtualproxy
-        logging.info("Virtual proxy '{vp}'".format(vp=vp))
-        path = "/qps/{vp}/user/{userdirectory}/{userid}".format(
-            vp=vp, userdirectory=userdirectory, userid=userid
-        )
+        logging.info(f"Virtual proxy '{vp}'")
+        path = f"/qps/{vp}/user/{userdirectory}/{userid}"
+
         resp = qps.driver.get(path)
         # print(resp)
         if resp.ok:
@@ -104,10 +113,8 @@ class Qsense:
         """delete user session"""
         qps = qsAPI.QPS(proxy=host, certificate=certificate, port=port)
 
-        logging.info("Virtual proxy '{virtualproxy}'".format(virtualproxy=virtualproxy))
-        path = "/qps/{virtualproxy}/session/{session}".format(
-            virtualproxy=virtualproxy, session=session
-        )
+        logging.info(f"Virtual proxy '{virtualproxy}'")
+        path = f"/qps/{virtualproxy}/session/{session}"
         resp = qps.driver.delete(path)
         logging.info(resp)
 
@@ -159,9 +166,9 @@ class Qsense:
                         "Removing the ID {id} from the entity".format(id=body["id"])
                     )
                     del body["id"]
-            logging.debug("Adding entity {entity}".format(entity=entity))
+            logging.debug(f"Adding entity {entity}")
             logging.debug(body)
-            result = qrs.driver.post("/qrs/{entity}".format(entity=entity), data=body)
+            result = qrs.driver.post(f"/qrs/{entity}")
             logging.debug(result)
             # logging.debug(result.json())
 
@@ -179,13 +186,9 @@ class Qsense:
             return
         for body in bodies:
             id = body["id"]
-            logging.debug(
-                "Updating resource {entity} with id {id}".format(entity=entity, id=id)
-            )
+            logging.debug(f"Updating resource {entity} with id {id}")
             logging.debug(body)
-            result = qrs.driver.put(
-                "/qrs/{entity}/{id}".format(entity=entity, id=id), data=body
-            )
+            result = qrs.driver.put(f"/qrs/{entity}/{id}")
             logging.debug(result)
             out = result.json()
 
@@ -195,7 +198,7 @@ class Qsense:
         """Get a specific entity by ID or entity list or count"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         result = qrs.driver.get(
-            "/qrs/{entity}/{id}".format(entity=entity, id=id),
+            f"/qrs/{entity}/{id}",
             {"filter": filter},
         ).json()
         print(json.dumps(result))
