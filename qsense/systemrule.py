@@ -13,10 +13,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from .apps import *
-from .custom_property import *
-from .license import *
-from .systemrule import *
-from .status import *
-from .users import *
-from .utils import *
+import logging
+import qsAPI
+
+
+def accessible_objects(qrs, resource_type, user_id, action):
+    """ """
+    resp = qrs.driver.post(
+        "/qrs/systemrule/security/audit/accessibleobjects",
+        data={
+            "resourceType": resource_type,  # Stream
+            "userID": user_id,
+            "action": action,
+        },  # read
+    )
+    if resp.ok:
+        return resp.json()
+    else:
+        return None

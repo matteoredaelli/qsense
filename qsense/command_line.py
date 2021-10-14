@@ -232,6 +232,17 @@ class Qsense:
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         qsense.users.delete_removed_exernally_users(qrs, user_directory, dryrun)
 
+    def accessible_objects(self, host, certificate, resource_type, user_id, action):
+        """Export (published or passing any other filter) applications to qvd files"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+        resp = qsense.systemrule.accessible_objects(qrs, resource_type, user_id, action)
+        logging.debug(resp)
+        if resp:
+            result = list(map(lambda r: r["name"], resp))
+            return result
+        else:
+            return resp
+
     def export_apps(
         self, host, certificate, target_path, filter="stream.name ne 'None'"
     ):
