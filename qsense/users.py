@@ -16,6 +16,7 @@
 import re
 import logging
 import qsAPI
+from .systemrule import *
 
 
 def extract_mail(u):
@@ -59,29 +60,50 @@ def delete_removed_exernally_users(qrs, user_directory, dryrun=True):
             qrs.UserDelete(u["id"])
 
 
-def get_users_and_groups(
-    qrs,
-    pFilter="removedExternally ne True",
-    pUserID="full",
-    groupFilter="^QLIKSENSE_",
-    userAttribute="name",
-    sep="\t",
-):
-    users = qrs.UserGet(pFilter=pFilter, pUserID=pUserID)
-    for u in users:
-        if "attributes" in u.keys():
-            mail = extract_mail(u)
-            for a in u["attributes"]:
-                groupname = a["attributeValue"]
-                if re.match(groupFilter, groupname, re.IGNORECASE):
-                    print(
-                        "{name}{sep}{mail}{sep}{groupname}\n".format(
-                            name=u[userAttribute],
-                            groupname=groupname,
-                            sep=sep,
-                            mail=mail,
-                        )
-                    )
+def extract_user_groups(user, groupFilter="^QLIKSENSE_"):
+    if "attributes" in user.keys():
+        for a in user["attributes"]:
+            groupname = a["attributeValue"]
+            if re.match(groupFilter, groupname, re.IGNORECASE):
+                yield (grouname)
+
+
+def user_info(qrs, user_id, resources, access):
+    users = qrs.UserGet(pFilter=f"userId eq '{user_id}'")
+    logging.debug(users)
+    if len(users) == 0:
+        logging.warning(f"UserId {userid} not found!")
+        yield {"Missing userId": userid}
+        return
+
+    user = users[0]
+
+    ## user info
+
+    for field in [
+        "name",
+        "createdDate",
+        "inactive",
+        "removedExternally",
+        "blacklisted",
+        "deleteProhibited",
+        "roles",
+    ]:
+        yield {field: user[field]}
+
+    ## License
+
+    param = {"filter": f"user.userId eq '{user_id}'"}
+    for typ in ["analyzer", "professional"]:
+        lic = qrs.driver.get(f"/qrs/license/{typ}accesstype/count", param=param).json()
+        yield {f"{typ} license": True if lic["value"] == 1 else False}
+
+    # access to resources
+    iduser = user["id"]
+    for resource in resources:
+        resp = accessible_objects(qrs, resource, iduser, access)
+        result = list(map(lambda r: r["name"], resp))
+        yield {f"{resource} {access} access": result}
 
 
 def user_sessions(hosts, certificate, usergroup, userid, vproxies=""):

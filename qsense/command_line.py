@@ -43,14 +43,14 @@ def connect_qix_engine(host, certfile, keyfile, ca_certs, user_directory, user_i
 class Qsense:
     """qsense is a python library and command line tool for Qliksense administrators"""
 
-    def get(self, host, certificate, path, service="qrs", port=4242):
+    def get(self, host, certificate, path, pFilter="1 eq 1", service="qrs", port=4242):
         """generic get http from Qlik (service can be qrs or qps)"""
         if service.upper() == "QPS":
             qrs = qsAPI.QPS(proxy=host, certificate=certificate, port=port)
         else:
             qrs = qsAPI.QRS(proxy=host, certificate=certificate, port=port)
-
-        resp = qrs.driver.get(path)
+        param = {"filter": pFilter}
+        resp = qrs.driver.get(path, param=param)
         if resp.ok:
             return json.dumps(resp.json())
         else:
@@ -254,6 +254,11 @@ class Qsense:
         """Get users with groups"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         qsense.users.get_users_and_groups(qrs)
+
+    def user_info(self, host, certificate, user_id, resources, access):
+        """Get users with groups"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+        return qsense.users.user_info(qrs, user_id, resources, access)
 
     def old_apps(
         self,

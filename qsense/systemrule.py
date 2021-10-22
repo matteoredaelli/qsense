@@ -17,13 +17,13 @@ import logging
 import qsAPI
 
 
-def accessible_objects(qrs, resource_type, user_id, action):
+def accessible_objects(qrs, resource_type, id, action):
     """ """
     resp = qrs.driver.post(
         "/qrs/systemrule/security/audit/accessibleobjects",
         data={
             "resourceType": resource_type,  # Stream
-            "userID": user_id,
+            "userID": id,
             "action": action,
         },  # read
     )
