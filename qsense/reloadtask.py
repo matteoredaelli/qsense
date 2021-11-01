@@ -13,11 +13,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from .apps import *
-from .custom_property import *
-from .license import *
-from .reloadtask import *
-from .systemrule import *
-from .status import *
-from .users import *
-from .utils import *
+import re
+import logging
+import qsAPI
+
+
+def reloadtask_count(qrs, status):
+    param = {"filter": f"operational.lastExecutionResult.status eq {status}"}
+    resp = qrs.driver.get(f"/qrs/reloadtask/count", param=param).json()
+    return resp

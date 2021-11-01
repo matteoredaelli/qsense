@@ -260,6 +260,12 @@ class Qsense:
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         return qsense.users.user_info(qrs, user_id, resources, access)
 
+    ## ["0: NeverStarted", "1: Triggered", "2: Started", "3: Queued", "4: AbortInitiated", "5: Aborting", "6: Aborted", "7: FinishedSuccess", "8: FinishedFail", "9: Skipped", "10: Retry", "11: Error", "12: Reset"]
+    def reloadtask_count(self, host, certificate, status):
+        """Get users with groups"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+        return qsense.reloadtask.reloadtask_count(qrs, status)
+
     def old_apps(
         self,
         host,

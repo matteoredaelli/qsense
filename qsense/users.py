@@ -98,7 +98,8 @@ def user_info(qrs, user_id, resources, access):
         lic = qrs.driver.get(f"/qrs/license/{typ}accesstype/count", param=param).json()
         yield {f"{typ} license": True if lic["value"] == 1 else False}
 
-    # access to resources
+    ## access to resources
+
     iduser = user["id"]
     for resource in resources:
         resp = accessible_objects(qrs, resource, iduser, access)
