@@ -43,17 +43,19 @@ def connect_qix_engine(host, certfile, keyfile, ca_certs, user_directory, user_i
 class Qsense:
     """qsense is a python library and command line tool for Qliksense administrators"""
 
-    def get(self, host, certificate, path, pFilter="1 eq 1", service="qrs", port=4242):
+    def get(self, host, certificate, path, pFilter=None, service="qrs", port=4242):
         """generic get http from Qlik (service can be qrs or qps)"""
         if service.upper() == "QPS":
             qrs = qsAPI.QPS(proxy=host, certificate=certificate, port=port)
         else:
             qrs = qsAPI.QRS(proxy=host, certificate=certificate, port=port)
-        param = {"filter": pFilter}
+        param = {"filter": pFilter} if pFilter else None
+
         resp = qrs.driver.get(path, param=param)
         if resp.ok:
             return json.dumps(resp.json())
         else:
+            logging.error(resp)
             return resp
 
     def post(
@@ -104,6 +106,7 @@ class Qsense:
         if resp.ok:
             return json.dumps(resp.json())
         else:
+            logging.error(resp)
             return resp
 
     def delete_user_session(
