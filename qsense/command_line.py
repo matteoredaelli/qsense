@@ -265,9 +265,14 @@ class Qsense:
 
     ## ["0: NeverStarted", "1: Triggered", "2: Started", "3: Queued", "4: AbortInitiated", "5: Aborting", "6: Aborted", "7: FinishedSuccess", "8: FinishedFail", "9: Skipped", "10: Retry", "11: Error", "12: Reset"]
     def reloadtask_count(self, host, certificate, status):
-        """Get users with groups"""
+        """Reloadtask count"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         return qsense.reloadtask.reloadtask_count(qrs, status)
+
+    def reloadtask_status(self, host, certificate, task_id, max_age):
+        """Reloadtask status. Max_age is in seconds"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+        return qsense.reloadtask.reloadtask_status(qrs, task_id, max_age)
 
     def old_apps(
         self,
