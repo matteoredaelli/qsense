@@ -17,6 +17,7 @@
 """Command line
 """
 import re
+import os
 from datetime import datetime
 import json
 import logging
@@ -265,7 +266,7 @@ class Qsense:
 
     ## ["0: NeverStarted", "1: Triggered", "2: Started", "3: Queued", "4: AbortInitiated", "5: Aborting", "6: Aborted", "7: FinishedSuccess", "8: FinishedFail", "9: Skipped", "10: Retry", "11: Error", "12: Reset"]
     def reloadtask_count(self, host, certificate, status):
-        """Reloadtask count"""
+        """Reloadtask count. Status 2=Started, 3=Queued, 7=FinishSuccessfully"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         return qsense.reloadtask.reloadtask_count(qrs, status)
 
@@ -390,7 +391,7 @@ class Qsense:
 
 def main():
     """main"""
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
     fire.Fire(Qsense)
 
 

@@ -10,6 +10,8 @@ pip install qsense
 
 # Usage
 
+export LOGLEVEL=INFO
+
 ```bash
 NAME
 	qsense - qsense is a python library and command line tool for Qliksense administrators
