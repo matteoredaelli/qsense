@@ -91,6 +91,39 @@ class Qsense:
         else:
             return resp
 
+    def put(
+        self,
+        host,
+        certificate,
+        path,
+        service="qrs",
+        port=4242,
+        body=None,
+        filename=None,
+    ):
+        """NOT TESTED: generic post http to Qlik (service can be qrs or qps)"""
+        logging.debug("Body= {body}".format(body=body))
+        if service.upper() == "QPS":
+            qrs = qsAPI.QPS(proxy=host, certificat=certificate, port=port)
+        else:
+            qrs = qsAPI.QRS(proxy=host, certificate=certificate, port=port)
+
+        data = "{}"
+
+        if filename:
+            with open(filename, "r") as myfile:
+                data = myfile.read().replace("\n", "")
+        elif body:
+            data = body
+        logging.debug(data)
+        resp = qrs.driver.put(path, data=data)
+        logging.debug(resp)
+
+    # if resp.ok:
+    #     return json.dumps(resp.json())
+    # else:
+    #     return resp
+
     def user_sessions(
         self, host, certificate, userdirectory, userid, virtualproxy="", port=4243
     ):
@@ -193,8 +226,8 @@ class Qsense:
             logging.debug(body)
             result = qrs.driver.put(f"/qrs/{entity}/{id}")
             logging.debug(result)
-            out = result.json()
-
+            ##out = result.json()
+            out = result  # .json()
             logging.debug(out)
 
     def entity(self, host, certificate, entity, id="full", filter=None):
