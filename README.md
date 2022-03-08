@@ -96,7 +96,7 @@ Look at the source file qsense/command_line.py for details
 JSONFILE=ds-shares.json
 rm $JSONFILE
 
-qsense get_entity qlikserver.redaelli.org client.pem dataconnection --filter "connectionstring sw '\\\\\\\amzn'" | jq '.' > $JSONFILE
+qsense get qlikserver.redaelli.org client.pem /qrs/dataconnection/full --filter "connectionstring sw '\\\\\\\amzn'" | jq '.' > $JSONFILE
 
 sed  -e 's/amznfsx94rgsb1e/amznfsxe9chyjel/g' ${JSONFILE} > new-${JSONFILE}
 
