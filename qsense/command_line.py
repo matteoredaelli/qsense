@@ -69,7 +69,7 @@ class Qsense:
         body=None,
         filename=None,
     ):
-        """NOT TESTED: generic post http to Qlik (service can be qrs or qps)"""
+        """generic post http request to Qlik (service can be qrs or qps)"""
         logging.debug("Body= {body}".format(body=body))
         if service.upper() == "QPS":
             qrs = qsAPI.QPS(proxy=host, certificat=certificate, port=port)
@@ -101,7 +101,7 @@ class Qsense:
         body=None,
         filename=None,
     ):
-        """NOT TESTED: generic post http to Qlik (service can be qrs or qps)"""
+        """generic put http request to Qlik (service can be qrs or qps)"""
         logging.debug("Body= {body}".format(body=body))
         if service.upper() == "QPS":
             qrs = qsAPI.QPS(proxy=host, certificat=certificate, port=port)
