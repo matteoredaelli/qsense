@@ -112,7 +112,7 @@ class Qsense:
 
         if filename:
             with open(filename, "r") as myfile:
-                data = myfile.read().replace("\n", "")
+                data = myfile.read() # .replace("\n", "")
         elif body:
             data = body
         logging.debug(data)
@@ -204,7 +204,7 @@ class Qsense:
                     del body["id"]
             logging.debug(f"Adding entity {entity}")
             logging.debug(body)
-            result = qrs.driver.post(f"/qrs/{entity}")
+            result = qrs.driver.post(f"/qrs/{entity}", data=body)
             logging.debug(result)
             # logging.debug(result.json())
 
@@ -224,9 +224,9 @@ class Qsense:
             id = body["id"]
             logging.debug(f"Updating resource {entity} with id {id}")
             logging.debug(body)
-            result = qrs.driver.put(f"/qrs/{entity}/{id}")
+            result = qrs.driver.put(f"/qrs/{entity}/{id}", data=body)
             logging.debug(result)
-            ##out = result.json()
+            #out = result.ok
             out = result  # .json()
             logging.debug(out)
 
