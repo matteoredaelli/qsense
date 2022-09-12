@@ -106,7 +106,9 @@ def get_script(qixe, qDocId):
         return None
 
 
-def get_old_apps(qrs, modified_days, last_reload_days, published=False):
+def get_old_apps(
+    qrs, modified_days, last_reload_days, published=False, pFilter="1 eq 1"
+):
     today = date.today()
     modified_date = (today - timedelta(days=modified_days)).strftime(
         "%Y-%m-%d %H:%M:%S"
@@ -117,8 +119,8 @@ def get_old_apps(qrs, modified_days, last_reload_days, published=False):
         "%Y-%m-%d %H:%M:%S"
     )
     logging.debug("Last reload time = " + last_reload_time)
-    pFilter = f"published eq {published} and modifiedDate lt '{modified_date}' and lastReloadTime lt '{last_reload_time}'"
-    logging.debug("Search apps with pFilter= " + str(pFilter))
+    pFilter = f"published eq {published} and modifiedDate lt '{modified_date}' and lastReloadTime lt '{last_reload_time}' and {pFilter}"
+    logging.debug("Searching apps with pFilter= " + str(pFilter))
     apps = qrs.AppGet(pFilter=pFilter)
     ##l = map(lambda a: { key:value for key,value in a.items()
     ##                    if key in ['id', 'name',
@@ -134,6 +136,7 @@ def find_old_apps(
     modified_days,
     last_reload_days,
     published,
+    pFilter,
     target_path,
     save_meta,
     skipdata,
@@ -143,7 +146,9 @@ def find_old_apps(
     if delete and (modified_days < 60 or last_reload_days < 60):
         logging.error("You want to delete too recent apps. Bye")
         return 1
-    apps = get_old_apps(qrs, modified_days, last_reload_days, published)
+    apps = get_old_apps(
+        qrs, modified_days, last_reload_days, published=published, pFilter=pFilter
+    )
     for app in apps:
         logging.debug("Found app: " + str(app))
         resp = False
@@ -164,3 +169,4 @@ def find_old_apps(
                 qrs.AppDelete(app["id"])
             else:
                 logging.error("Cannot export (and then delete) app: " + app["id"])
+    return apps

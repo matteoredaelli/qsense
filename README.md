@@ -10,7 +10,7 @@ pip install qsense
 
 # Usage
 
-export LOGLEVEL=INFO
+export LOGLEVEL=DEBUG
 
 ```bash
 NAME
@@ -101,4 +101,30 @@ qsense get qlikserver.redaelli.org client.pem /qrs/dataconnection/full --pFilter
 sed  -e 's/amznfsx94rgsb1e/amznfsxe9chyjel/g' ${JSONFILE} > new-${JSONFILE}
 
 qsense update_entity qlikserver.redaelli.org client.pem dataconnection new-${JSONFILE}
+```
+
+## Exporting and/or deleting old applications
+
+Not published and not updated/reloaded in the last 120 days
+
+```bash
+qsense old_apps qlikserver.redaelli.org client.pem /qrs/dataconnection/full --target_path /tmp --modified_days=120 --last_reload_days=120  --export --delete
+```
+
+Published in some specific streams and not updated/reloaded in the last 120 days 
+
+```bash
+qsense old_apps qlikserver.redaelli.org client.pem /qrs/dataconnection/full --target_path /tmp --modified_days=120 --last_reload_days=120 --published --pFilter "(stream.name eq 'Crystal' or stream.name eq 'Deloitte' or stream.name eq 'Iconsulting' or stream.name eq 'Reply')"  --export --delete
+```
+
+## Removing analyzer licenses for professiobal users
+
+```bash
+qsense deallocate_analyzer_licenses_for_professionals qlikserver.redaelli.org client.pem --nodryrun
+```
+
+## Top users with unpublished apps
+
+```bash
+qsense users_with_unpublished_apps qlikserver.redaelli.org client.pem --threshold 30
 ```

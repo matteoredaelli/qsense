@@ -112,7 +112,7 @@ class Qsense:
 
         if filename:
             with open(filename, "r") as myfile:
-                data = myfile.read() # .replace("\n", "")
+                data = myfile.read()  # .replace("\n", "")
         elif body:
             data = body
         logging.debug(data)
@@ -226,7 +226,7 @@ class Qsense:
             logging.debug(body)
             result = qrs.driver.put(f"/qrs/{entity}/{id}", data=body)
             logging.debug(result)
-            #out = result.ok
+            # out = result.ok
             out = result  # .json()
             logging.debug(out)
 
@@ -315,6 +315,7 @@ class Qsense:
         modified_days=1000,
         last_reload_days=1000,
         published=False,
+        pFilter="1 eq 1",
         target_path=".",
         save_meta=True,
         skipdata=True,
@@ -322,13 +323,14 @@ class Qsense:
         delete=False,
     ):
         """Find old apps using 'modified_date' and 'last_reload_time' filters:
-        then you can export them or delete or notify via email the owners"""
+        then you can export them or delete"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
         return qsense.apps.find_old_apps(
             qrs,
             modified_days,
             last_reload_days,
             published=published,
+            pFilter=pFilter,
             target_path=target_path,
             save_meta=save_meta,
             skipdata=skipdata,
