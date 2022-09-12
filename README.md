@@ -114,10 +114,10 @@ qsense old_apps qlikserver.redaelli.org client.pem /qrs/dataconnection/full --ta
 Published in some specific streams and not updated/reloaded in the last 120 days 
 
 ```bash
-qsense old_apps qlikserver.redaelli.org client.pem /qrs/dataconnection/full --target_path /tmp --modified_days=120 --last_reload_days=120 --published --pFilter "(stream.name eq 'Crystal' or stream.name eq 'Deloitte' or stream.name eq 'Iconsulting' or stream.name eq 'Reply')"  --export --delete
+qsense old_apps qlikserver.redaelli.org client.pem /qrs/dataconnection/full --target_path /tmp --modified_days=120 --last_reload_days=120 --published --pFilter "(stream.name eq '000' or stream.name eq 'AAA' or stream.name eq 'BBB' or stream.name eq 'CCC')"  --export --delete
 ```
 
-## Removing analyzer licenses for professiobal users
+## Removing analyzer licenses for professional users
 
 ```bash
 qsense deallocate_analyzer_licenses_for_professionals qlikserver.redaelli.org client.pem --nodryrun
