@@ -44,6 +44,18 @@ def connect_qix_engine(host, certfile, keyfile, ca_certs, user_directory, user_i
 class Qsense:
     """qsense is a python library and command line tool for Qliksense administrators"""
 
+    def delete(self, host, certificate, path, service="qrs", port=4242):
+        """generic delete http from Qlik (service can be qrs or qps)"""
+        if service.upper() == "QPS":
+            qrs = qsAPI.QPS(proxy=host, certificate=certificate, port=port)
+        else:
+            qrs = qsAPI.QRS(proxy=host, certificate=certificate, port=port)
+
+        resp = qrs.driver.delete(path)
+        if not resp.ok:
+            logging.error(resp)
+        return resp.status_code
+
     def get(self, host, certificate, path, pFilter=None, service="qrs", port=4242):
         """generic get http from Qlik (service can be qrs or qps)"""
         if service.upper() == "QPS":
