@@ -31,8 +31,11 @@ def deallocate_unused_analyzer_licenses(qrs, days, dryrun=True):
     logging.debug(f"Last used date = {last_used}")
 
     pFilter = f"lastUsed lt '{last_used}'"
-    logging.debug("Searching licenses with pFilter= " + str(pFilter))
-    analyzers = qrs.driver.get("/qrs/license/analyzeraccesstype/full").json()
+    logging.debug("Searching licenses with pFilter=" + str(pFilter))
+    param = {"filter": pFilter} if pFilter else None
+    analyzers = qrs.driver.get(
+        "/qrs/license/analyzeraccesstype/full", param=param
+    ).json()
     logging.debug("Found %d Analyzer licenses" % len(analyzers))
 
     for u in analyzers:
