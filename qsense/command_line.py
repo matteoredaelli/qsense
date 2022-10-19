@@ -350,6 +350,17 @@ class Qsense:
             delete=delete,
         )
 
+    def find_changes_published_apps(
+        self,
+        host,
+        certificate,
+        start_time,
+        end_time,
+    ):
+        """Find new published_apps"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+        return qsense.apps.find_changes_published_apps(qrs, start_time, end_time)
+
     def open_doc(
         self,
         host,
