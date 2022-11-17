@@ -88,17 +88,17 @@ class Qsense:
         else:
             qrs = qsAPI.QRS(proxy=host, certificate=certificate, port=port)
 
-        data = "{}"
-
         if filename:
             with open(filename, "r") as myfile:
                 data = myfile.read().replace("\n", "")
         elif body:
             data = body
+        else:
+            data = "{}"
         logging.debug(data)
         resp = qrs.driver.post(path, data=data)
         logging.debug(resp)
-        if resp.ok:
+        if resp and resp.ok:
             return json.dumps(resp.json())
         else:
             return resp
@@ -351,16 +351,47 @@ class Qsense:
         )
 
     def find_changes_published_apps(
+            self,
+            host,
+            certificate,
+            start_time,
+            end_time,
+            out = "text"
+    ):
+        """Find new published_apps"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+        result = qsense.apps.find_changes_published_apps(qrs, start_time, end_time, out)
+        return result
+
+    def find_changes_dataconnections(
         self,
         host,
         certificate,
         start_time,
         end_time,
+            out = "text"
     ):
-        """Find new published_apps"""
+        """Find changes in dataconnections"""
         qrs = qsAPI.QRS(proxy=host, certificate=certificate)
-        return qsense.apps.find_changes_published_apps(qrs, start_time, end_time)
-
+        result = qsense.dataconnection.find_changes(qrs, start_time, end_time, out)
+        return result
+    def find_changes(
+            self,
+            host,
+            certificate,
+            start_time,
+            end_time,
+            out = "text"
+    ):
+        """Find changes in dataconnections"""
+        qrs = qsAPI.QRS(proxy=host, certificate=certificate)
+        result_published_apps = qsense.apps.find_changes_published_apps(qrs, start_time, end_time, out)
+        result_dataconnections = qsense.dataconnection.find_changes(qrs, start_time, end_time, out)
+        result = result_published_apps + result_dataconnections
+        if out == "text":
+            result.sort()
+        return result
+    
     def open_doc(
         self,
         host,

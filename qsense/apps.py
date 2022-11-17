@@ -131,18 +131,19 @@ def get_old_apps(
     return apps
 
 
-def find_changes_published_apps(qrs, start_time, end_time):
+def find_changes_published_apps(qrs, start_time, end_time, out):
     pFilter = f"published eq true and publishTime ge '{start_time}' and publishTime le '{end_time}'"
     logging.debug("Searching apps with pFilter= " + str(pFilter))
-    apps = qrs.AppGet(pFilter=pFilter)
-    result = map(
-        lambda a: "{time}: {stream} : {name}".format(
-            time=a["publishTime"], stream=a["stream"]["name"], name=a["name"]
-        ),
-        apps,
-    )
-    result = list(result)
-    result.sort()
+    result = qrs.AppGet(pFilter=pFilter)
+    if out == "text":
+        result = map(
+            lambda a: "{time}: app '{name}' was published into the stream '{stream}'".format(
+                time=a["publishTime"], stream=a["stream"]["name"], name=a["name"]
+            ),
+            result,
+        )
+        result = list(result)
+        result.sort()
     return result
 
 

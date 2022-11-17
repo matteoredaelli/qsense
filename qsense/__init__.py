@@ -15,6 +15,7 @@
 
 from .apps import *
 from .custom_property import *
+from .dataconnection import *
 from .license import *
 from .reloadtask import *
 from .systemrule import *
