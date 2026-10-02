@@ -3,7 +3,6 @@
 *qsense* is a python library and command line tool for QLIK QlikSense. It contains some useful functions for administrators/developers of QLiksense
 
 It is built on top of the python libraries [qsAPI](https://github.com/rafael-sanz/qsAPI) and [pyqlikengine](https://github.com/qliknln/pyqlikengine)
-
 # Installation
 
 pip install qsense
